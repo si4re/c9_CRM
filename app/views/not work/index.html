@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:vml="urn:schemas-microsoft-com:vml">
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+    <script src="ya-map-2.1.min.js"></script>
+
+
+    <script src="script.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <div id="map" class="w3-col s10 w3-dark w3-border" ng-app="myApp" ng-controller="myController">
+        {{message}}
+        <ya-map ya-zoom="8" ya-center="[37.64,55.76]" ya-after-init="afterMapInit($target)"></ya-map>
+        <button ng-click="del()">Удалить</button>
+    </div>
+
+
+
+
+
+</body>
+
+</html>

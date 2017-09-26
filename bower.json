@@ -1,0 +1,30 @@
+{
+  "name": "crm",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Mikle <miroshnikov.m@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/si4re/crm",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "bootstrap": "^4.0.0",
+    "angular-xeditable": "^0.8.0",
+    "angular-bootstrap": "^2.5.0",
+    "angular-route": "latest",
+    "angular": "latest",
+    "angular-file-upload": "^2.5.0",
+    "angular-read-more": "^1.0.6",
+    "angular-js-xlsx": "^0.0.3",
+    "angular-ymaps": "^0.1.0",
+    "angular-oauth2": "^4.1.1"
+  }
+}

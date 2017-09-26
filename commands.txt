@@ -1,0 +1,27 @@
+
+"C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe" -dbpath C:\Users\Mikhail.Miroshnikov\crm\db
+
+
+
+
+
+"C:\Program Files\MongoDB\Server\3.4\bin\mongoexport.exe" --db myproject --collection projects --out C:\Users\Mikhail.Miroshnikov\Desktop\ds.json
+
+
+
+db.projects.remove( {"_id": "19000"});
+
+
+show collections
+
+
+db.users.drop()
+
+
+
+db.projects.find({ _id: '555'}, {'oneC': { "$elemMatch": { 'number': '9258996' } }, 'oneC:number':1 });
+
+
+var query = { 'files.filename': id };
+var protection = { files: { $elemMatch: { filename: id } }, _id: 0, 'files.originalFileName': 1 };
+

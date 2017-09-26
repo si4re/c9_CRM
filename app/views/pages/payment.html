@@ -1,0 +1,109 @@
+<p></p>
+
+{{message}}
+
+<div ng-controller="ngtableCtrl as vm">
+    </br>
+
+    <div hm-read-more hm-text="{{text}}" hm-limit="{{limit}}" hm-more-text="{{moreText}}" hm-less-text="{{lessText}}" hm-dots-class="{{dotsClass}}" hm-link-class="{{linkClass}}">
+    </div>
+
+
+    <table ng-table="vm.tableParams" class="table table-hover table-responsive table-sm table-bordered" show-filter="true">
+
+
+
+        <tr ng-repeat="user in $data">
+
+            <td title="'Тип  работ'" filter="{ workType: 'select'}" filter-data="data5">
+                {{user.workType}}
+            </td>
+            <td title="'Наименование работ'" filter="{ workName: 'text'}">
+                {{user.workName}}</td>
+            <td title="'Тип оборудования'" filter="{ equipmentType: 'text'}">
+                {{user.equipmentType}}</td>
+            <td title="'Состав  работ, комментарии'">
+
+                <div hm-read-more hm-text="{{user.workComment}}" hm-limit="{{limit}}" hm-more-text="{{moreText}}" hm-less-text="{{lessText}}" hm-dots-class="{{dotsClass}}" hm-link-class="{{linkClass}}">
+                </div>
+
+
+            </td>
+            <td title="'Единица измерения'">
+                {{user.unit}}</td>
+            <td title="'Кол-во'">
+                {{user.count}}</td>
+            <td title="'Цена'">
+                {{user.unitPrice}}</td>
+        </tr>
+    </table>
+
+
+
+</div>
+
+<!-- http://jedfoster.com/Readmore.js/    -->
+
+
+<!--- 
+____________________________________________________________________ end ng table
+<form>
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+            <input type="text" class="form-control" placeholder="Search" ng-model="searchItem">
+        </div>
+    </div>
+    {{selected_item.workType}}
+</form>
+
+
+<select class="form-control" ng-init="cc={location: ''}" ng-model="cc.city">
+         <option ng-repeat="city in data " value="{{city.city}}">{{city.city}}</option>
+    </select>
+
+<div ng-repeat="city in data| filter:cc">
+    {{city.city}} {{city.location}}
+</div>
+
+______________________________________________________________________________________________
+
+
+
+<select class="form-control" ng-model="selected_item" ng-options="i.city for i in data  ">
+        <option value="" disabled>Please select an option</option>
+</select>
+
+
+<table class="table table-hover table-responsive table-sm table-bordered">
+    <td>
+
+        <select class="form-control" ng-init="cc={location: ''}" ng-model="cc.city">
+         <option ng-repeat="i in prices" value="{{i.workType}}">{{i.workType}}</option>
+    </select>
+
+    </td>
+    <td>Наименование работ</td>
+    <td>Тип оборудования</td>
+    <td>Состав работ, комментарии</td>
+    <td>Единица измерения</td>
+    <td>Кол-во</td>
+    <td>Цена</td>
+    <tr ng-repeat="i in prices  | filter:searchItem">
+
+        
+
+   
+        <td>{{i.workType}}</td>
+        <td>{{i.workName}}</td>
+        <td>{{i.equipmentType}}</td>
+        <td>
+            <pre></pre>{{i.workComment | limitTo : 100}}</td>
+
+        <td>{{i.unit}}</td>
+        <td>{{i.count}}</td>
+        <td>{{i.unitPrice}}</td>
+    </tr>
+</table>
+
+-->

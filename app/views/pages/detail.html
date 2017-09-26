@@ -1,0 +1,123 @@
+<style>
+    .centerCell {
+        text-align: center;
+    }
+</style>
+
+
+
+
+
+<div ng-controller="urlattrController">
+    <!-- table uploaded files -->
+    <div class="container">
+        <div class="row align-items-end">
+            <div class="col"></div>
+            <div class="col-12 col-md-auto">
+                <!-- style="border: 1px solid #5bc0de" -->
+                <h6 class="text-success">Приложенные файлы:</h6>
+                <table class="table table-responsive table-sm table-bordered">
+                    <tr ng-repeat="i in IdProjectData.files">
+                        <td>
+                            <a ng-href="/download/{{i.filename}}">{{i.originalFileName}} {{i.size/1024/1024|number:2}} Mb</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger btn-sm" ng-click="deleteFile(i.filename); deleteItem(IdProjectData.files, i)" ng-disabled="">remove</button>
+                        </td>
+                    </tr>
+                </table>
+                <!-- upload files -->
+                <div ng-controller="fileCtrl">
+                    <label class="btn btn-outline-info btn-sm btn-file">Добавить файлы 
+          <input multiple="multiple"
+                 nv-file-select=""
+                 style="display: none"
+                 type="file"
+                 uploader="uploader" /></label>
+                    <ul>
+                        <li ng-repeat="item in uploader.queue">
+                            <div>{{item.file.name}} {{ item.file.size/1024/1024|number:2 }} Mb {{ item.progress }}</div>
+                        </li>
+                        <button class="btn btn-primary btn-sm" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length" ng-hide="!uploader.queue.length;">Upload all</button>
+                        <button class="btn btn-danger btn-sm" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length" ng-hide="!uploader.queue.length">Remove all</button>
+                    </ul>
+                </div>
+            </div>
+            <div class="col col-lg-1"></div>
+        </div>
+        <!--
+
+
+
+         style="border: 1px solid #5bc0de"   
+         -->
+        <div class="row">
+            <!--   <div class="col col-sm-1"></div>  -->
+            <div class="col">
+                <div ng-controller="uploadXlsxCtrl">
+                    <h6 class="text-primary">PO: {{IdProjectData._id}}</h6>
+                    <!--  start auth  !-->
+                    <div ng-if="currentUser.role == 'admin'">
+                        <label class="btn btn-outline-info btn-sm btn-file">Добавить 1c из Excel в PO: {{IdProjectData._id}} 
+            <js-xls onerror="error"
+                    onread="read"></js-xls></label>
+                    </div>
+                    <!--  end  auth  !-->
+                    <div class="alert alert-success" ng-hide="!successHttpPutAlertMessage" role="alert">
+                        <strong>Well done!</strong>You successfully upload 1c from Excel.</div>
+                    <div class="alert alert-danger" ng-hide="!errorImportFromExcelAlertMessage" role="alert">
+                        <strong>Error -</strong>imports from Excel, check your file!</div>
+                </div>
+                <div ng-repeat="i in IdProjectData"></div>
+                <table class="table table-hover table-responsive table-sm table-bordered">
+                    <td>1с</td>
+                    <td>Позиция</td>
+                    <td>Адрес</td>
+                    <td>СМР</td>
+                    <td>ПНР</td>
+                    <td>Отчет для 1с</td>
+                    <tr ng-repeat="k in IdProjectData.oneC">
+                        <td>
+                            <a class="text-muted" ng-href="#!/{{IdProjectData._id}}/{{k.number}}">{{k.number}}</a>
+                        </td>
+                        <td class="text-muted">{{k.code}}</td>
+                        <td>
+                            <a class="text-muted" ng-href="#!/route/maps/{{IdProjectData._id}}">{{k.address}}</a>
+                        </td>
+                        <td class="centerCell">
+                            {{k.CMR}}
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.CMR" disabled>
+                                <span class="custom-control-indicator"></span>
+                              </label>
+                        </td>
+
+                        <td class="centerCell">
+                            {{k.PNR}}
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.PNR" disabled>
+                                <span class="custom-control-indicator"></span>
+                              </label>
+                        </td>
+
+
+                        <td>
+                            <!--  start auth  !-->
+                            <div ng-if="currentUser.role == 'admin'">
+                                <div ng-controller="httpCtrl">
+                                    <button aria-label="Close" class="close" ng-click="deteteRowFromTable(k.number);deleteItem(IdProjectData.oneC, k)" type="button">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                                </div>
+                            </div>
+                            <!--  end auth  !-->
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container -->
+</div>

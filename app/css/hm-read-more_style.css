@@ -1,0 +1,38 @@
+		a {
+		    cursor: pointer;
+		}
+		
+		.more-show-hide {
+		    -webkit-transition: all linear 0.2s;
+		    transition: all linear 0.2s;
+		}
+		
+		.more-show-hide.ng-hide {
+		    opacity: 0;
+		}
+		
+		.toggle-dots-grey {
+		    color: darkgrey;
+		}
+		
+		.toggle-dots-yellow {
+		    color: black;
+		}
+		
+		.toggle-dots-yellow {
+		    color: yellow;
+		}
+		
+		.toggle-link-yellow {
+		    color: yellow;
+		}
+		
+		.toggle-link-black {
+		    color: black;
+		    font-weight: bold;
+		}
+		
+		.toggle-link-grey {
+		    color: darkgrey;
+		    font-style: italic;
+		}

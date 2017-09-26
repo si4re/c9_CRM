@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- define angular app -->
+<html ng-app="myApp">
+
+<head>
+
+    <!--CSS for hm-read-more -->
+    <link href="/css/hm-read-more_style.css" rel="stylesheet">
+
+    <!-- Bootstrap v4 alfa    -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+    <!-- Bootstrap v3 -->
+    <!-- Latest compiled and minified CSS 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+     -->
+
+
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../../bower_components/angular-xeditable/dist/css/xeditable.css" />
+    <!-- endbower -->
+    <!--                    -->
+    <!-- bower:js -->
+    <script src="../../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../../bower_components/tether/dist/js/tether.js"></script>
+    <script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../../bower_components/angular/angular.js"></script>
+    <script src="../../bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../../bower_components/angular-route/angular-route.js"></script>
+    <script src="../../bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
+    <script src="../../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../../bower_components/angular-read-more/dist/readmore.min.js"></script>
+    <script src="../../bower_components/js-xlsx/dist/xlsx.core.min.js"></script>
+    <script src="../../bower_components/angular-js-xlsx/angular-js-xlsx.js"></script>
+    <script src="../../bower_components/angular-ymaps/angular-ymaps.js"></script>
+    <script src="../../bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="../../bower_components/query-string/query-string.js"></script>
+    <script src="../../bower_components/angular-oauth2/dist/angular-oauth2.js"></script>
+    <!-- endbower -->
+
+    <!-- ng-table
+    <script src="https://unpkg.com/ng-table@3.0.1/bundles/ng-table.min.js"></script>
+    -->
+    <link rel="stylesheet" ; href="https://unpkg.com/ng-table@3.0.1/bundles/ng-table.min.css">
+
+    <script src="../../node_modules/ng-table/bundles/ng-table.min.js"></script>
+
+    <!-- Angular controllers -->
+    <script src="/controllers/myApp.js"></script>
+    <script src="/controllers/httpCtrl.js"></script>
+    <script src="/controllers/fileCtrl.js"></script>
+    <script src="/controllers/xeditableTableCtrl.js"></script>
+    <script src="/controllers/angular-ui-bootstrapCtrl.js"></script>
+    <script src="/controllers/ngtableCtrl.js"></script>
+    <script src="/controllers/uploadXlsxCtrl.js"></script>
+    <script src="/controllers/ymapsCtrl.js"></script>
+    <script src="/controllers/testCtrl.js"></script>
+    <script src="/controllers/loginCtrl.js"></script>
+
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript">
+    </script>
+
+</head>
+<!-- define angular controller -->
+
+<body ng-controller="mainController">
+
+    <!-- alerts  !-->
+
+    <!--
+    <div class="alert alert-success" ng-hide="" role="alert">                                  border: 1px solid #5bc0de
+        <strong>Well done!</strong>You successfully upload 1c from Excel.</div>
+    !-->
+
+    <div class="alert alert-danger" ng-hide="!Unauthorized_401" role="alert">
+        <strong>Error 401 Unauthorized -</strong> Проверьте логин и пароль</div>
+
+    <div class="alert alert-danger" ng-hide="!Forbidden_403" role="alert">
+        <strong>Error 403 Forbidden -</strong> Доступ запрещен</div>
+
+    <!-- !-->
+
+    <nav ng-if="isAuthenticated" class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+        <a class="navbar-brand" href="#">
+            <!--  Home  !-->
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#!"> <i class="fa fa-home"></i>PO <span class="sr-only">(current)</span> </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!1c">1c</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!payment">payment</a>
+                </li>
+            </ul>
+
+            <div class="nav-item">
+
+
+
+                <div class="text-muted" ng-if="currentUser">Welcome, {{ currentUser.email }}
+                    <div ng-switch on="currentUser.role">
+                        <div ng-switch-when="admin">role: admin</div>
+                        <div ng-switch-when="user">role: user</div>
+                        <div ng-switch-default>default role</div>
+                        <button class="btn btn-outline-primary btn-sm" ng-click="logoutCurrentUser()">logout</button>
+                    </div>
+                </div>
+
+
+            </div>
+    </nav>
+
+
+
+
+    <div id="main">
+        <!-- angular templating -->
+        <!-- this is where content will be injected -->
+        <div ng-view=""></div>
+    </div>
+</body>
+
+</html>

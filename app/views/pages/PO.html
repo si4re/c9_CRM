@@ -1,0 +1,124 @@
+<style>
+    .lines {
+        margin-bottom: 30px;
+    }
+    
+    table,
+    th,
+    td {
+        border: 1px solid grey;
+        border-collapse: collapse;
+        padding: 5px;
+    }
+    
+    table tr:first-child {
+        /*  background-color: #f1f1f1;
+        font-weight: 900;   */
+    }
+</style>
+
+
+<div ng-controller="mainController">{{currentUser.role}}</div>
+
+
+
+<div ng-controller="httpCtrl">
+
+
+    <div class="container">
+        <div class="lines">
+            <div class="row">
+                <div class="col">
+
+
+
+                    <table>
+                        <h5>
+                            <td>PO</td>
+                            <td>Заказ Nokia - ВК</td>
+                            <td>Заказ АДВ - Nokia</td>
+                            <td>Сумма АДВ с НДС </td>
+                            <td>Сумма суб. подряд с НДС </td>
+                            <td>Оплачено суб. подряд</td>
+                        </h5>
+                        <h5>
+                            <tbody ng-repeat="i in getProjectData">
+                                <td>
+
+                                    <div class="input-group">
+
+                                        <a class="text-primary" ng-href="#!{{i._id}}">{{i._id}}</a>
+
+
+                                        <!--  start auth  !-->
+                                        <div ng-if="currentUser.role == 'admin'">
+                                            <div ng-controller="httpCtrl">
+                                                <button aria-label="Close" class="close" ng-click="deletePO(i._id)" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                                            </div>
+                                        </div>
+                                        <!--  end auth  !-->
+
+                                    </div>
+                                </td>
+
+
+
+
+
+
+
+                            </tbody>
+                        </h5>
+
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="lines">
+            <div class="row">
+                <div class="col-12 col-md-auto">
+
+
+                    <div ng-if="currentUser.role == 'admin'">
+                        <div class="input-group">
+                            <input type="text" ng-model="PO" required class="form-control" placeholder="номер проекта">
+
+                            <span class="input-group-btn">
+                             <button class="btn btn-sm btn-outline-primary" type="button" ng-click="postNewPO(PO)">Добавить проект</button>
+                        </span>
+
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-outline-primary" type="button" ng-click="updatePO()">Обновить</button>
+                           </span>
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+<!-- end ng-controller="httpCtrl" !-->
