@@ -1,18 +1,21 @@
 'use strict';
 
 
-myApp.controller('httpCtrl', function($scope, $http, sharePO) {
+myApp.controller('httpCtrl', function($scope, $http, $timeout, sharePO) {
 
 
 
     $scope.message = "httpCtrl message";
 
 
-    // project get All
+    // OK   get PO from server and create table in PO.html
     $scope.getAllProjectData = function() {
         $scope.getProjectData = [];
-        $http.get("/projects").then(function(response) {
+        $http.get('/api/PO').then(function(response) { // old  $http.get("/projects").then(function(response) {
             $scope.getProjectData = response.data;
+
+            console.log(response.data);
+
         }).then(function(response) {});
     };
 
@@ -21,53 +24,21 @@ myApp.controller('httpCtrl', function($scope, $http, sharePO) {
 
 
 
-    // note 
-    $scope.getAllData = function() {
-        $scope.getData = [];
-        $http.get("/notes").then(function(response) {
-            $scope.getData = response.data;
-        }).then(function(response) {});
-    };
-    $scope.getAllData();
 
+    // OK  delete item from array
+    $scope.deleteItem = function(array, item) {
 
+        var index = array.indexOf(item);
 
-
-    $scope.postId = function(text) {
-        var data = {
-            "body": text,
-            "title": "title 555"
-        }
-        $http.post("/notes", data).then(function(response) {
-            $scope.resFromPostData = response.data;
-        });
+        if (index > -1) {
+            $scope.ind = index;
+            array.splice(index, 1);
+            $scope.newArray = array;
+        } else { alert("error from slice"); }
     };
 
 
-    $scope.deleteAll = function() {
-        $http.delete("/notes").then(function(response) {
-            $scope.resFromDeleteAll = response.data;
-        });
-    };
-
-    // download file from link
-    $scope.downloadFile = function(filename) {
-        // $scope.downloadFile = [];
-        $http.get("/download/" + filename).then(function(response) {
-
-        }).then(function(response) {});
-    };
-
-    // for delete item from Row in Table (list of 1c)
-    $scope.deteteRowFromTable = function(item) {
-
-        $http.delete("/projects/" + item).then(function(response) {
-
-        });
-    };
-
-
-    // create new PO - PO.html
+    // OK  create new PO - PO.html
     $scope.postNewPO = function(numberPO) {
 
 
@@ -82,9 +53,22 @@ myApp.controller('httpCtrl', function($scope, $http, sharePO) {
                     project: numberPO
                 };
 
-                $http.post("/api/PO", data).then(function(response) {
+                $http.post("/api/PO", data).then(function(response) { // api_project_route.js: apiRoutes.put('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+                    if (response.data.error.code) { // all error check
+
+                        $scope.errmsg = response.data.error.errmsg; // show message
+
+                        $timeout(function() { // hide error in 3,5 sec
+                            $scope.errmsg = false;
+                        }, 3500);
+                    }
+
                     console.log(response.data);
                     $scope.getAllProjectData();
+
+                }, function(reject) {
+                    console.log(reject);
                 });
 
             } // end if
@@ -94,18 +78,11 @@ myApp.controller('httpCtrl', function($scope, $http, sharePO) {
 
         } // end function
 
-    $scope.updatePO = function() {
-            $scope.getAllProjectData();
-        }
-        // delete PO
 
+    // OK delete PO
     $scope.deletePO = function(PO) {
 
-        var data = {
-            project: PO
-        };
-
-        $http.put("/api/PO", data).then(function(response) {
+        $http.delete("/api/" + PO).then(function(response) {
             console.log(response);
 
         }, function(err) {
@@ -116,6 +93,31 @@ myApp.controller('httpCtrl', function($scope, $http, sharePO) {
     };
 
 
+
+    // OK  for delete item from Row in Table (list of 1c)   
+    $scope.deteteRowFromTable = function(item) {
+
+        $http.delete("/projects/" + item).then(function(response) {
+
+        });
+    };
+
+
+
+
+
+
+
+
+    //need check
+
+    // download file from link
+    $scope.downloadFile = function(filename) {
+        // $scope.downloadFile = [];
+        $http.get("/download/" + filename).then(function(response) {
+
+        }).then(function(response) {});
+    };
 
 
 });

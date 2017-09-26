@@ -52,23 +52,13 @@ MongoClient.connect(db.url, (err, database) => {
     if (err) return console.log(err)
     require('./app/routes')(app, database);
 
-    app.listen(port, () => {
-        console.log('We are live on ' + port);
+    app.listen(port, () => { // for c9.io use  process.env.PORT || 3000, process.env.IP || "0.0.0.0"
+        console.log('We are live on  ', port);
     });
 });
 
 
 
 var api_route = require('./app/routes/api_route')(app);
-//var passport = require('passport');
-//app.use(passport.initialize());
-
-/*
-// for jwt  use it after express
-var User = require('./app/models/user'); // get our mongoose model
-var secret = require('./config/jsonwebtoken_secret');
-var api_route = require('./app/routes/api_route')(app, db, User, express, jwt, secret);
-var create_user = require('./app/routes/create_user')(app, db, User); // pass variables to creat_user
-*/
 
 var Project = require('./app/models/project');

@@ -20,6 +20,10 @@ module.exports = function(app, db) {
     var collectionName = "projects";
 
 
+
+
+
+    // go to PO ---> change it to /api/PO
     // Read C'R'UD
     app.get('/projects/:id', (req, res) => {
         const id = req.params.id;
@@ -34,17 +38,11 @@ module.exports = function(app, db) {
     });
 
 
-    //  Read C'R'UD     get all 
-    app.get('/projects', (req, res) => {
-        const details = {};
-        db.collection(collectionName).find({}).toArray((err, item) => {
-            if (err) {
-                res.send({ 'error': 'An error has occurred' });
-            } else {
-                res.send(item);
-            }
-        });
-    });
+
+
+
+
+
 
 
 
@@ -176,8 +174,7 @@ module.exports = function(app, db) {
 
     app.put('/PO', (req, res) => {
 
-        console.log(req.body);
-
+        console.log(req.body);;
 
         const details = { "_id": req.body.numberPO };
         db.collection(collectionName).remove(details, (err, item) => {

@@ -19,11 +19,6 @@ module.exports = function(app) {
         var apiRoutes = express.Router();
 
 
-
-
-
-
-
         // 'C'RUD create new PO
         apiRoutes.post('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
 
@@ -38,22 +33,63 @@ module.exports = function(app) {
                 if (err) {
                     console.log(err);
                     res.send({ error: err });
+                } else {
+                    console.log(result);
+                    res.send({ result: result });
                 }
 
-                console.log(result);
+
             });
 
 
         }); //end post
 
 
-        // CRU'D' delete PO   we use put because angular delete cant send body data
-        apiRoutes.put('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
 
-            console.log("api_project_route.js, delete PO: ", req.body.project);
+        // C'R'UD   get -  list all PO
+        apiRoutes.get('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+
+            console.log("api_project_route.js, get - list all PO: ", req.body.project);
+
+
+            Project.find({}, '_id', function(err, result) { // important! send back only request data - for security reason
+
+                if (err) {
+                    console.log(err);
+                    res.send({ error: err });
+                }
+
+                console.log(result);
+                res.send(result);
+            });
+
+
+        }); //end post
+
+
+
+        //  Read C'R'UD     get all 
+        app.get('/projects555test', (req, res) => {
+            const details = {};
+            db.collection(collectionName).find({}).toArray((err, item) => {
+                if (err) {
+                    res.send({ 'error': 'An error has occurred' });
+                } else {
+                    res.send(item);
+                }
+            });
+        });
+
+
+
+        // CRU'D' delete PO   we use put because angular delete cant send body data
+        apiRoutes.delete('/:PO', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+            const PO = req.params.PO;
+            console.log("api_project_route.js, delete PO: ", PO);
 
             Project.remove({
-                _id: req.body.project
+                _id: PO
 
             }, function(err, result) {
 
@@ -62,7 +98,8 @@ module.exports = function(app) {
                     res.send({ error: err });
                 }
 
-                // console.log(result);
+                console.log(result);
+                res.send(result);
             });
 
         }); //end post

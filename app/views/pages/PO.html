@@ -24,6 +24,10 @@
 
 <div ng-controller="httpCtrl">
 
+    {{message}}
+    <div ng-if="currentUser.role == 'admin'" class="alert alert-danger" ng-hide="!errmsg" role="alert">
+        <strong> Error -   </strong> {{errmsg}}</div>
+
 
     <div class="container">
         <div class="lines">
@@ -31,15 +35,14 @@
                 <div class="col">
 
 
-
                     <table>
                         <h5>
                             <td>PO</td>
-                            <td>Заказ Nokia - ВК</td>
-                            <td>Заказ АДВ - Nokia</td>
-                            <td>Сумма АДВ с НДС </td>
-                            <td>Сумма суб. подряд с НДС </td>
-                            <td>Оплачено суб. подряд</td>
+                            <td ng-if="currentUser.role == 'admin'"> Заказ Nokia - ВК</td>
+                            <td ng-if="currentUser.role == 'admin'"> Заказ АДВ - Nokia</td>
+                            <td ng-if="currentUser.role == 'admin'"> Сумма АДВ с НДС </td>
+                            <td ng-if="currentUser.role == 'admin'"> Сумма суб. подряд с НДС </td>
+                            <td ng-if="currentUser.role == 'admin'"> Оплачено суб. подряд</td>
                         </h5>
                         <h5>
                             <tbody ng-repeat="i in getProjectData">
@@ -52,11 +55,11 @@
 
                                         <!--  start auth  !-->
                                         <div ng-if="currentUser.role == 'admin'">
-                                            <div ng-controller="httpCtrl">
-                                                <button aria-label="Close" class="close" ng-click="deletePO(i._id)" type="button">
+
+                                            <button aria-label="Close" class="close" ng-click="deleteItem(getProjectData, i); deletePO(i._id);  " type="button">
             <span aria-hidden="true">&times;</span>
           </button>
-                                            </div>
+
                                         </div>
                                         <!--  end auth  !-->
 
@@ -92,9 +95,7 @@
                              <button class="btn btn-sm btn-outline-primary" type="button" ng-click="postNewPO(PO)">Добавить проект</button>
                         </span>
 
-                            <span class="input-group-btn">
-                                <button class="btn btn-sm btn-outline-primary" type="button" ng-click="updatePO()">Обновить</button>
-                           </span>
+
 
 
                         </div>
