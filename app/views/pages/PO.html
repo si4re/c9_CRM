@@ -88,6 +88,10 @@
 
 
                     <div ng-if="currentUser.role == 'admin'">
+
+                        <button style="margin: 0px 0px 15px 0px;" class="btn btn-sm btn-outline-danger" type="button" ng-click="setConfirmDeletePO()" ng-hide="hideDeleteButton">Подтвердить удаление проекта</button>
+
+
                         <div class="input-group">
                             <input type="text" ng-model="PO" required class="form-control" placeholder="номер проекта">
 
@@ -95,10 +99,9 @@
                              <button class="btn btn-sm btn-outline-primary" type="button" ng-click="postNewPO(PO)">Добавить проект</button>
                         </span>
 
-
-
-
                         </div>
+
+
                     </div>
 
 

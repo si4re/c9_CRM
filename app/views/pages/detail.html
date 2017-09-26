@@ -58,6 +58,52 @@
                     <h6 class="text-primary">PO: {{IdProjectData._id}}</h6>
                     <!--  start auth  !-->
                     <div ng-if="currentUser.role == 'admin'">
+
+                        <div>
+
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
+                                {{orderNokiaVk}}
+                                <input type="text" ng-model="orderNokiaVk" required class="form-control" placeholder="Номер заказа Nokia-ВК: {{currentUser.role}}">
+
+                                <span class="input-group-btn">
+                                         <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
+                                    </span>
+
+                            </div>
+
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
+                                {{orderNokiaVk}}
+                                <input type="text" ng-model="orderNokiaVk" required class="form-control" placeholder="Номер заказа АДВ-Nokia: {{currentUser.role}}">
+
+                                <span class="input-group-btn">
+                                             <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
+                                        </span>
+
+                            </div>
+
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
+                                {{orderNokiaVk}}
+                                <input type="text" ng-model="orderNokiaVk" required class="form-control" placeholder="Сумма АДВ с НДС: {{currentUser.role}}">
+
+                                <span class="input-group-btn">
+                                                 <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
+                                            </span>
+
+                            </div>
+
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
+                                {{orderNokiaVk}}
+                                <input type="text" ng-model="orderNokiaVk" required class="form-control" placeholder="Сумма суб. подряд с НДС: {{currentUser.role}}">
+
+                                <span class="input-group-btn">
+                                                     <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
+                                                </span>
+
+                            </div>
+
+
+                        </div>
+
                         <label class="btn btn-outline-info btn-sm btn-file">Добавить 1c из Excel в PO: {{IdProjectData._id}} 
             <js-xls onerror="error"
                     onread="read"></js-xls></label>
