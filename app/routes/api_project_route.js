@@ -49,10 +49,10 @@ module.exports = function(app) {
         // C'R'UD   get -  list all PO
         apiRoutes.get('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
 
-            console.log("api_project_route.js, get - list all PO: ", req.body.project);
+            console.log("api_project_route.js, get - list all PO: ");
 
 
-            Project.find({}, '_id', function(err, result) { // important! send back only request data - for security reason
+            Project.find({}, /* '_id',  */ function(err, result) { // important! send back only request data - for security reason
 
                 if (err) {
                     console.log(err);
@@ -65,21 +65,6 @@ module.exports = function(app) {
 
 
         }); //end post
-
-
-
-        //  Read C'R'UD     get all 
-        app.get('/projects555test', (req, res) => {
-            const details = {};
-            db.collection(collectionName).find({}).toArray((err, item) => {
-                if (err) {
-                    res.send({ 'error': 'An error has occurred' });
-                } else {
-                    res.send(item);
-                }
-            });
-        });
-
 
 
         // CRU'D' delete PO   we use put because angular delete cant send body data
@@ -103,6 +88,72 @@ module.exports = function(app) {
             });
 
         }); //end post
+
+
+
+
+        // 'C'R'U'D    create or update  set   /api/PO/orderVkNokia   method post        http controller
+
+        apiRoutes.post('/PO/orderVkNokia', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+            console.log("api_project_route.js, update /api/PO/orderVkNokia: ", req.body.project, ' ', req.body.orderNokiaVk);
+
+
+            var whatToUpdate = { _id: req.body.project };
+            var entry = { orderVkNokia: req.body.orderNokiaVk };
+
+            Project.update(whatToUpdate, entry, function(err, result) {
+
+                if (err) {
+                    console.log(err);
+                    res.send({ error: err });
+                }
+
+
+                Project.find({}, function(err, result) {
+                    console.log(JSON.stringify(result, null, 2));
+                });
+
+                res.send(result);
+
+            });
+
+        }); //end post
+
+
+
+
+        // 'C'R'U'D    create or update  set   /api/PO/orderVkNokia   method post        http controller
+
+        apiRoutes.get('/:PO/orderVkNokia', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+            console.log("api_project_route.js, get orderVkNokia  value from /api/:PO/orderVkNokia: ");
+
+            const PO = req.params.PO;
+
+            var whatToFind = { _id: PO };
+
+            Project.find(whatToFind, function(err, result) {
+
+                if (err) {
+                    console.log(err);
+                    res.send({ error: err });
+                }
+
+                if (result.length <= 0) {
+                    res.send({ error: 'array is empty' });
+                } else {
+                    console.log(result, null, 2); // pretty print
+                    res.send(result);
+                }
+
+            });
+
+        }); //end get
+
+
+
+
 
 
 

@@ -50,16 +50,6 @@ module.exports = function(app) {
         next();
     }
 
-    // apiRoutes.use('/555', ProjectRoutes);
-
-    //  ProjectRoutes.put('/PO', middlewareFunction, function(req, res) {
-    //     console.log(req.body);
-    //  });
-
-    //todoRoutes.get('/', middlewareFunction, requireAuth, AuthenticationController.roleAuthorization(['user']), reqSendUser);
-    // todoRoutes.get('/', requireAuth, AuthenticationController.roleAuthorization(['creator', 'editor']), reqSendAdmin);
-
-
 
     // Set up routes
     app.use('/api', apiRoutes);

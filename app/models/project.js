@@ -2,7 +2,13 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 var ProjectSchema = new mongoose.Schema({
-    _id: String,
+    _id: String, // номер проекта
+    orderVkNokia: String, // номер заказа ВК Nokia
+
+    orderADVNokia: Number, // номер заказа Nokia АДВ
+    totalSummADV: Number, // сумма для АДВ
+    totalSummSub: Number, // сумма для подрядчика
+    currentPaymentToSub: Number, // что на текущий момент оплачено подрячику
     oneC: [{
         number: Number,
         code: String,

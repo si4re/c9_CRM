@@ -37,7 +37,7 @@ module.exports = function(app, db) {
 
             db.collection(collectionName).update(whatToUpdate, { $push: entry }, (err, result) => {
                 if (err) {
-                    res.send({ 'error': 'An error has occurred in PUT' });
+                    res.send({ 'error': err });
                 } else {
                     res.send(result);
                     console.log(req.file);

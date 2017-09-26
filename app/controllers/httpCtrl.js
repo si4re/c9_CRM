@@ -6,7 +6,7 @@ myApp.controller('httpCtrl', function($scope, $http, $timeout, sharePO) {
 
 
     $scope.message = "httpCtrl message";
-
+    $scope.numberPO = sharePO.getPO();
 
 
 
@@ -135,6 +135,133 @@ myApp.controller('httpCtrl', function($scope, $http, $timeout, sharePO) {
 
         });
     };
+
+
+
+
+    // for change:     Номер заказа ВК - Nokia      http://127.0.0.1:8080/#!/555
+    // postNewPO(PO)
+
+
+    $scope.buttonStyle = 'btn-outline-primary';
+    $scope.inputColor;
+
+    // watch orderNokiaVk
+
+    $scope.$watch('orderNokiaVk', function(newValue, oldValue, scope) {
+        if (newValue) {
+            $scope.buttonStyle = 'btn-outline-primary';
+            $scope.inputColor = null;
+        }
+    });
+
+
+
+    $scope.setOrderVkNokia = function(numberPO, orderNokiaVkFromAngular) {
+
+
+            function isNumeric(n) {
+                return !isNaN(parseFloat(n)) && isFinite(n) && n.length >= 2 && n.length <= 20;
+            }
+
+
+            if (isNumeric(numberPO)) { // check if input is number 
+
+                var data = {
+                    project: numberPO,
+                    orderNokiaVk: orderNokiaVkFromAngular
+                };
+
+                $http.post("/api/PO/orderVkNokia", data).then(function(response) { // api_project_route.js: apiRoutes.put('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+                    if (response.data.error) { // all error check
+
+                        $scope.errmsg = response.data.error.errmsg; // show message
+
+                        $timeout(function() { // hide error in 3,5 sec
+                            $scope.errmsg = false;
+                        }, 3500);
+                    }
+                    $scope.StatusOrderVkNokia = orderNokiaVkFromAngular;
+                    console.log(response.data);
+                    $scope.buttonStyle = 'btn-outline-success';
+                    $scope.inputColor = 'has-success';
+
+                }, function(reject) {
+                    console.log(reject);
+                });
+
+            } // end if
+            else {
+
+                $scope.errmsg = 'введите корректный номер заказа ВК - Nokia'; // show message
+
+                $timeout(function() { // hide error in 3,5 sec
+                    $scope.errmsg = false;
+                }, 3500);
+
+            }
+
+        } // end function
+
+
+
+
+
+
+
+
+    $scope.getOrderVkNokia = function(numberPO) {
+
+
+            function isNumeric(n) {
+                return !isNaN(parseFloat(n)) && isFinite(n) && n.length >= 2 && n.length <= 20;
+            }
+
+
+            if (isNumeric(numberPO)) { // check if input is number 
+
+                $http.get("/api/" + numberPO + "/orderVkNokia/").then(function(response) {
+
+
+                    if (response.data.error) { // all error check
+
+                        console.log('error:  ', response.data.error);
+                    }
+
+                    $scope.StatusOrderVkNokia = response.data[0].orderVkNokia;
+
+
+                }, function(reject) {
+                    console.log(reject);
+                });
+
+            } // end if
+            else {
+
+                console.log('getOrderVkNokia: PO not number')
+            }
+
+        } // end function
+
+    $scope.StatusOrderVkNokia;
+
+    $scope.getOrderVkNokia(sharePO.getPO());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
