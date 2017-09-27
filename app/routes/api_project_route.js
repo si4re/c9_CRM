@@ -46,13 +46,35 @@ module.exports = function(app) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         // C'R'UD   get -  list all PO
-        apiRoutes.get('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+        apiRoutes.get('/PO', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res, next) {
 
             console.log("api_project_route.js, get - list all PO: ");
 
+            var returnData = '_id'; // sending back data depend on user role 
 
-            Project.find({}, '_id', function(err, result) { // important! send back only request data - for security reason
+            if (req.currentUserRoleFromroleAuthorizationNode == 'admin') {
+
+                returnData = {};
+
+            } // end if admin
+
+
+
+
+            Project.find({}, returnData, function(err, result) { // important! send back only request data - for security reason
 
                 if (err) {
                     console.log(err);
@@ -65,6 +87,15 @@ module.exports = function(app) {
 
 
         }); //end post
+
+
+
+
+
+
+
+
+
 
 
         // CRU'D' delete PO   we use put because angular delete cant send body data

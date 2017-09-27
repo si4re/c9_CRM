@@ -92,6 +92,7 @@ exports.roleAuthorization = function(roles) {
             }
 
             if (roles.indexOf(foundUser.role) > -1) {
+                req.currentUserRoleFromroleAuthorizationNode = foundUser.role;
                 return next();
             }
 
