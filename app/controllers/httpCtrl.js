@@ -145,13 +145,14 @@ myApp.controller('httpCtrl', function($scope, $http, $timeout, sharePO) {
 
     $scope.buttonStyle = 'btn-outline-primary';
     $scope.inputColor;
-
+    $scope.buttonOrderNokiaVk = 'Изменить';
     // watch orderNokiaVk
 
     $scope.$watch('orderNokiaVk', function(newValue, oldValue, scope) {
         if (newValue) {
             $scope.buttonStyle = 'btn-outline-primary';
             $scope.inputColor = null;
+            $scope.buttonOrderNokiaVk = 'Изменить';
         }
     });
 
@@ -186,6 +187,7 @@ myApp.controller('httpCtrl', function($scope, $http, $timeout, sharePO) {
                     console.log(response.data);
                     $scope.buttonStyle = 'btn-outline-success';
                     $scope.inputColor = 'has-success';
+                    $scope.buttonOrderNokiaVk = 'Готово';
 
                 }, function(reject) {
                     console.log(reject);
