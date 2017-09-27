@@ -61,45 +61,82 @@
                     <div ng-controller="httpCtrl">
                         <div>
 
-                            <div style="margin: 0px 0px 15px 0px;" class="input-group {{inputColor}}">
 
-                                <input type="text" ng-model="orderNokiaVk" required class="form-control form-control-success" placeholder="Номер заказа Nokia-ВК: {{StatusOrderVkNokia}}">
+
+                            <!--  Заказ Nokia - ВК !-->
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group {{orderNokiaVk.inputColor}}">
+
+                                <input type="text" ng-model="orderNokiaVk.value" required class="form-control form-control-success" placeholder="Номер заказа Nokia-ВК: {{orderNokiaVk.status}}">
 
                                 <span class="input-group-btn">
-                                         <button class="btn btn-sm {{buttonStyle}}" type="button" ng-click="setOrderVkNokia(IdProjectData._id, orderNokiaVk)"> {{buttonOrderNokiaVk}} </button>
+                                         <button  style="width:80px"  class="btn btn-sm  {{orderNokiaVk.button.style}}" type="button" ng-click="setOrderVkNokia(IdProjectData._id, orderNokiaVk.value)"> {{orderNokiaVk.button.name}} </button>
                                     </span>
 
                             </div>
 
-                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
 
-                                <input type="text" ng-model="orderNokiaVk1" required class="form-control" placeholder="Номер заказа АДВ-Nokia: {{currentUser.role}}">
+
+
+
+                            <!--  Заказ АДВ - Nokia !-->
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group {{orderADVNokia.inputColor}}">
+
+
+                                <input type="text" ng-model="orderADVNokia.value" required class="form-control form-control-success" placeholder="Номер заказа Nokia-АДВ: {{orderADVNokia.status}}">
 
                                 <span class="input-group-btn">
-                                             <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
-                                        </span>
+                                                                             <button  style="width:80px"  class="btn btn-sm  {{orderADVNokia.button.style}}" type="button" ng-click="setOrderADVNokia(IdProjectData._id, orderADVNokia.value)"> {{orderADVNokia.button.name}} </button>
+                                                                        </span>
 
                             </div>
 
-                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
 
-                                <input type="text" ng-model="orderNokiaVk1" required class="form-control" placeholder="Сумма АДВ с НДС: {{currentUser.role}}">
+
+
+
+                            <!--  Сумма АДВ с НДС  !-->
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group {{totalSummADV.inputColor}}">
+
+
+                                <input type="text" ng-model="totalSummADV.value" required class="form-control form-control-success" placeholder="Сумма АДВ с НДС: {{totalSummADV.status}}">
 
                                 <span class="input-group-btn">
-                                                 <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
-                                            </span>
+                                                                                                                 <button  style="width:80px"  class="btn btn-sm  {{totalSummADV.button.style}}" type="button" ng-click="setTotalSummADV(IdProjectData._id, totalSummADV.value)"> {{totalSummADV.button.name}} </button>
+                                                                                                            </span>
 
                             </div>
 
-                            <div style="margin: 0px 0px 15px 0px;" class="input-group">
 
-                                <input type="text" ng-model="orderNokiaVk1" required class="form-control" placeholder="Сумма суб. подряд с НДС: {{currentUser.role}}">
+
+
+
+
+                            <!--  Сумма суб. подряд с НДС !-->
+                            <div style="margin: 0px 0px 15px 0px;" class="input-group {{totalSummSub.inputColor}}">
+
+
+                                <input type="text" ng-model="totalSummSub.value" required class="form-control form-control-success" placeholder="Сумма суб. подряд с НДС: {{totalSummSub.status}}">
 
                                 <span class="input-group-btn">
-                                                     <button class="btn btn-sm btn-outline-primary" type="button" ng-click="">Изменить</button>
-                                                </span>
+                                                                                                                                                 <button  style="width:80px"  class="btn btn-sm  {{totalSummSub.button.style}}" type="button" ng-click="setTotalSummSub(IdProjectData._id, totalSummSub.value)"> {{totalSummSub.button.name}} </button>
+                                                                                                                                            </span>
 
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                         </div>

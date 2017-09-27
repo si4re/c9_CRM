@@ -42,7 +42,7 @@
                             <td ng-if="currentUser.role == 'admin'"> Заказ АДВ - Nokia</td>
                             <td ng-if="currentUser.role == 'admin'"> Сумма АДВ с НДС </td>
                             <td ng-if="currentUser.role == 'admin'"> Сумма суб. подряд с НДС </td>
-                            <td ng-if="currentUser.role == 'admin'"> Оплачено суб. подряд</td>
+
                         </h5>
                         <h5>
                             <tbody ng-repeat="i in getProjectData">
@@ -65,7 +65,10 @@
 
                                     </div>
                                 </td>
-                                <td>{{i.orderVkNokia}}</td>
+                                <td ng-if="currentUser.role == 'admin'">{{i.orderVkNokia}}</td>
+                                <td ng-if="currentUser.role == 'admin'">{{i.orderADVNokia}}</td>
+                                <td ng-if="currentUser.role == 'admin'">{{i.totalSummADV}}</td>
+                                <td ng-if="currentUser.role == 'admin'">{{i.totalSummSub}}</td>
 
 
 

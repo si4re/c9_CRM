@@ -52,7 +52,7 @@ module.exports = function(app) {
             console.log("api_project_route.js, get - list all PO: ");
 
 
-            Project.find({}, /* '_id',  */ function(err, result) { // important! send back only request data - for security reason
+            Project.find({}, '_id', function(err, result) { // important! send back only request data - for security reason
 
                 if (err) {
                     console.log(err);
@@ -92,7 +92,42 @@ module.exports = function(app) {
 
 
 
-        // 'C'R'U'D    create or update  set   /api/PO/orderVkNokia   method post        http controller
+
+
+
+
+
+        // 'C'R'U'D    get   /api/PO/detailsOrderSumm   method  get     http controller
+
+        apiRoutes.get('/:PO/detailsOrderSumm', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+            console.log("api_project_route.js, get detailsOrderSumm  value from /api/:PO/detailsOrderSumm: ");
+
+            const PO = req.params.PO;
+
+            var whatToFind = { _id: PO };
+
+            Project.find(whatToFind, function(err, result) {
+
+                if (err) {
+                    console.log(err);
+                    res.send({ error: err });
+                }
+
+                if (result.length <= 0) {
+                    res.send({ error: 'array is empty' });
+                } else {
+                    console.log(result, null, 2); // pretty print
+                    res.send(result);
+                }
+
+            });
+
+        }); //end get
+
+
+
+        // 'C'R'U'D     Заказ Nokia - ВК   create or update  set   /api/PO/orderVkNokia   method post        http controller
 
         apiRoutes.post('/PO/orderVkNokia', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
 
@@ -123,33 +158,128 @@ module.exports = function(app) {
 
 
 
-        // 'C'R'U'D    create or update  set   /api/PO/orderVkNokia   method post        http controller
 
-        apiRoutes.get('/:PO/orderVkNokia', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+        // 'C'R'U'D    Заказ АДВ - Nokia    create or update  set   /api/PO/orderADVNokia   method post        http controller
 
-            console.log("api_project_route.js, get orderVkNokia  value from /api/:PO/orderVkNokia: ");
+        apiRoutes.post('/PO/orderADVNokia', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
 
-            const PO = req.params.PO;
+            console.log("api_project_route.js, update /api/PO/orderADVNokia: ", req.body.project, ' ', req.body.orderADVNokia);
 
-            var whatToFind = { _id: PO };
 
-            Project.find(whatToFind, function(err, result) {
+            var whatToUpdate = { _id: req.body.project };
+            var entry = { orderADVNokia: req.body.orderADVNokia };
+
+            Project.update(whatToUpdate, entry, function(err, result) {
 
                 if (err) {
                     console.log(err);
                     res.send({ error: err });
                 }
 
-                if (result.length <= 0) {
-                    res.send({ error: 'array is empty' });
-                } else {
-                    console.log(result, null, 2); // pretty print
-                    res.send(result);
-                }
+
+                Project.find({}, function(err, result) {
+                    console.log(JSON.stringify(result, null, 2));
+                });
+
+                res.send(result);
 
             });
 
-        }); //end get
+        }); //end post
+
+
+
+
+        // 'C'R'U'D   Сумма АДВ с НДС     create or update  set   /api/PO/totalSummADV   method post        http controller
+
+        apiRoutes.post('/PO/totalSummADV', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+            console.log("api_project_route.js, update /api/PO/totalSummADV: ", req.body.project, ' ', req.body.totalSummADV);
+
+
+            var whatToUpdate = { _id: req.body.project };
+            var entry = { totalSummADV: req.body.totalSummADV };
+
+            Project.update(whatToUpdate, entry, function(err, result) {
+
+                if (err) {
+                    console.log(err);
+                    res.send({ error: err });
+                }
+
+
+                Project.find({}, function(err, result) {
+                    console.log(JSON.stringify(result, null, 2));
+                });
+
+                res.send(result);
+
+            });
+
+        }); //end post
+
+
+
+
+
+
+
+
+        // 'C'R'U'D   Сумма суб. подряд с НДС    create or update  set   /api/PO/totalSummADV   method post        http controller
+
+        apiRoutes.post('/PO/totalSummSub', requireAuth, AuthenticationController.roleAuthorization(['admin']), function(req, res) {
+
+            console.log("api_project_route.js, update /api/PO/totalSummSub: ", req.body.project, ' ', req.body.totalSummSub);
+
+
+            var whatToUpdate = { _id: req.body.project };
+            var entry = { totalSummSub: req.body.totalSummSub };
+
+            Project.update(whatToUpdate, entry, function(err, result) {
+
+                if (err) {
+                    console.log(err);
+                    res.send({ error: err });
+                }
+
+
+                Project.find({}, function(err, result) {
+                    console.log(JSON.stringify(result, null, 2));
+                });
+
+                res.send(result);
+
+            });
+
+        }); //end post
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
