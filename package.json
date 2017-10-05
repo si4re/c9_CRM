@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "wiredep": "node inject_wiredep.js",
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "wiredep": "node inject_wiredep.js"
   },
   "author": "",
   "license": "ISC",
