@@ -12,7 +12,11 @@
 </style>
 
 <div>
+
+    1c.html
     {{message}}
+  
+
 </div>
 <!--!!!!!!!!!!!!!!!!!!!!!!! -->
 <div ng-controller="urlattrController">
@@ -25,67 +29,54 @@
             <div class="col"></div>
             <div class="col-12 col-md-auto">
                 <!-- style="border: 1px solid #5bc0de" -->
-                <h6 class="text-success">Фото:</h6>
-                <table class="table table-responsive table-sm table-bordered">
-                    <tr ng-repeat="i in IdProjectData.files">
-                        <td>
-                            <a ng-href="/download/{{i.filename}}">{{i.originalFileName}} {{i.size/1024/1024|number:2}} Mb</a>
-                        </td>
-                        <td>
-                            <button class="btn btn-outline-danger btn-sm" ng-click="deleteFile(i.filename); deleteItem(IdProjectData.files, i)" ng-disabled="">remove</button>
-                        </td>
-                    </tr>
-                </table>
+
+
+
 
                 <h6 class="text-success">Cloud files:</h6>
 
-                <table class="table table-responsive table-sm table-bordered">
-                    <tr ng-repeat="i in ListFilesFromCloud">
-                        <td>
-                            <a ng-href="/api/download/{{i.filename}}">{{i.filename}}</a>
-                        </td>
-                        <td>
-                            <button class="btn btn-outline-danger btn-sm" ng-click="deleteFileFromCloud(i.filename); deleteItem(ListFilesFromCloud, i)" ng-disabled="">remove</button>
-                        </td>
-                    </tr>
-                </table>
 
-                <!-- upload files -->
-                <div ng-controller="fileCtrl">
-                    <label class="btn btn-outline-info btn-sm btn-file">Добавить 
-          <input multiple="multiple"
-                 nv-file-select=""
-                 style="display: none"
-                 type="file"
-                 uploader="uploader" /></label>
+                <div ng-controller="1cController">
+
+                    {{message}}
+                    <table class="table table-responsive table-sm table-bordered">
+                        <tr ng-repeat="i in ListFilesFromCloud">
+                            <td>
+                                <a href="" ng-click="downloadFromYaApi(i.filename)">{{i.filename}}</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-danger btn-sm" ng-click="deleteFileFromCloud(i.filename); deleteItem(ListFilesFromCloud, i)"
+                                    ng-disabled="">remove</button>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+
+
+                    {{message}}
+
+                    <label class="btn btn-outline-info btn-sm btn-file">Добавить ya drive
+                        <input multiple="multiple" nv-file-select="" style="display: none" type="file" uploader="uploader1C" />
+                    </label>
                     <ul>
-                        <li ng-repeat="item in uploader.queue">
-                            <div>{{item.file.name}} {{ item.file.size/1024/1024|number:2 }} Mb {{ item.progress }}</div>
+                        <li ng-repeat="item in uploader1C.queue" class="text-muted">
+                            <div>{{item.file.name}} {{ item.progress}} %
+
+                                <i ng-hide="!item.progress" class="fa fa-spinner fa-spin" style="font-size:16px"></i>
+                            </div>
+
                         </li>
-                        <button class="btn btn-primary btn-sm" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length" ng-hide="!uploader.queue.length;">Upload all</button>
-                        <button class="btn btn-danger btn-sm" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length" ng-hide="!uploader.queue.length">Remove all</button>
+                        <button class="btn btn-primary btn-sm" ng-click="uploader1C.uploadAll()" ng-hide="!uploader1C.queue.length ||  uploader1C.isUploading">Upload all</button>
+                        <button class="btn btn-danger btn-sm" ng-click=" uploader1C.clearQueue()" ng-disabled="!uploader1C.queue.length" ng-hide="!uploader1C.queue.length">Remove all</button>
                     </ul>
+
+
+
+
                 </div>
 
-                {{spinner}}
-
-                <label class="btn btn-outline-info btn-sm btn-file">Добавить ya drive 
-          <input  multiple="multiple"
-                 nv-file-select=""
-                 style="display: none"
-                 type="file"
-                 uploader="uploader1C" /></label>
-                <ul>
-                    <li ng-repeat="item in uploader1C.queue" class="text-muted">
-                        <div>{{item.file.name}} {{ item.progress}} %
-
-                            <i ng-hide="!item.progress" class="fa fa-spinner fa-spin" style="font-size:16px"></i>
-                        </div>
-
-                    </li>
-                    <button class="btn btn-primary btn-sm" ng-click="uploader1C.uploadAll()" ng-hide="!uploader1C.queue.length ||  uploader1C.isUploading">Upload all</button>
-                    <button class="btn btn-danger btn-sm" ng-click="uploader1C.clearQueue()" ng-disabled="!uploader1C.queue.length" ng-hide="!uploader1C.queue.length">Remove all</button>
-                </ul>
 
 
 
@@ -111,6 +102,7 @@
         <div class="row">
             <!--   <div class="col col-sm-1"></div>  -->
             <div class="col">
+                {{message}}
                 <div class="text-primary">PO: {{PONumber1}} 1c: {{one1Number}}</div>
                 <table class="table table-responsive table-sm table-bordered">
                     <tr>
@@ -127,16 +119,18 @@
                 <div ng-controller="httpCtrl">
 
                     <label class="custom-control custom-checkbox">
-                        <input id="checkboxCMR" type="checkbox" class="custom-control-input"   ng-change="checkboxCMRUpdate(checkboxCMR)"  ng-model="checkboxCMR" ng-checked="CMRStatus">
+                        <input id="checkboxCMR" type="checkbox" class="custom-control-input" ng-change="checkboxCMRUpdate(checkboxCMR)" ng-model="checkboxCMR"
+                            ng-checked="CMRStatus">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">СМР выполнены</span>
-                      </label>
+                    </label>
 
                     <label class="custom-control custom-checkbox">
-                            <input id="checkboxPNR" type="checkbox" class="custom-control-input"   ng-change="checkboxPNRUpdate(checkboxPNR)"  ng-model="checkboxPNR" ng-checked="PNRStatus">
-                            <span class="custom-control-indicator"></span>
-                            <span class="custom-control-description">ПНР выполнены</span>
-                          </label>
+                        <input id="checkboxPNR" type="checkbox" class="custom-control-input" ng-change="checkboxPNRUpdate(checkboxPNR)" ng-model="checkboxPNR"
+                            ng-checked="PNRStatus">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">ПНР выполнены</span>
+                    </label>
                 </div>
 
             </div>

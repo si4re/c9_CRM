@@ -438,6 +438,8 @@ module.exports = function(app) {
                     res.send({ error: err });
                 }
 
+                res.send({result: result});
+
             });
 
 
@@ -465,6 +467,8 @@ module.exports = function(app) {
                     res.send({ error: err });
                 }
 
+                res.send({result: result});
+                
             });
 
 

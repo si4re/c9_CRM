@@ -6,7 +6,7 @@
 
 
 
-
+detail.html
 
 <div ng-controller="urlattrController">
     <!-- table uploaded files -->
@@ -16,6 +16,7 @@
             <div class="col-12 col-md-auto">
                 <!-- style="border: 1px solid #5bc0de" -->
                 <h6 class="text-success">Приложенные файлы:</h6>
+                {{message}}
                 <table class="table table-responsive table-sm table-bordered">
                     <tr ng-repeat="i in IdProjectData.files">
                         <td>

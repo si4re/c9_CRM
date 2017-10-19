@@ -20,13 +20,41 @@ myApp.constant('USER_ROLES', {
 });
 
 
-myApp.service('Session', function () {
-    this.create = function (token, email, role) {
+myApp.service('myService', function() {
+    this.summ = function(a) {
+        return a + a;
+    }
+    this.publicProperty = "public";
+    var privateProperty = "private";
+    this.getPrivateProperty = function() {
+        return privateProperty;
+    }
+});
+
+myApp.factory('myFactory', function() {
+
+    var factory = {};
+
+    factory.method1 = function() {
+        return 1;
+    }
+
+    factory.method2 = function() {
+        return 2;
+    }
+
+    return factory;
+});
+
+
+
+myApp.service('Session', function() {
+    this.create = function(token, email, role) {
         this.token = token;
         this.email = email;
         this.role = role;
     };
-    this.destroy = function () {
+    this.destroy = function() {
         this.token = null;
         this.email = null;
         this.role = null;
@@ -36,14 +64,14 @@ myApp.service('Session', function () {
 
 
 //auth service
-myApp.factory('AuthService', function ($http, $location, $rootScope, Session, AUTH_EVENTS) {
+myApp.factory('AuthService', function($http, $location, $rootScope, Session, AUTH_EVENTS) {
     var authService = {};
 
-    authService.login = function (credentials) {
+    authService.login = function(credentials) {
 
         return $http
             .post('/api/auth/login', credentials)
-            .then(function (res) {
+            .then(function(res) {
 
                 console.log(res);
 
@@ -64,17 +92,17 @@ myApp.factory('AuthService', function ($http, $location, $rootScope, Session, AU
                 }
 
 
-            }, function (err) {
+            }, function(err) {
                 console.log("AuthService factory error:");
                 console.log(err);
             })
-            .then(function (res) {
+            .then(function(res) {
                 Session.create(res.data.token, res.data.user.email, res.data.user.role);
                 return res.data.user;
             });
     }; // end Login
 
-    authService.logout = function () {
+    authService.logout = function() {
 
         $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 
@@ -86,7 +114,7 @@ myApp.factory('AuthService', function ($http, $location, $rootScope, Session, AU
     };
 
 
-    authService.isAuthorized = function (authorizedRoles) {
+    authService.isAuthorized = function(authorizedRoles) {
         if (!angular.isArray(authorizedRoles)) { // check if input data is array
             authorizedRoles = [authorizedRoles];
         }
@@ -95,7 +123,7 @@ myApp.factory('AuthService', function ($http, $location, $rootScope, Session, AU
     };
 
 
-    authService.isAuthenticated = function () {
+    authService.isAuthenticated = function() {
         return !!Session.token;
     };
 
@@ -104,15 +132,15 @@ myApp.factory('AuthService', function ($http, $location, $rootScope, Session, AU
 });
 
 // share data between two controllers
-myApp.service("sharePO", function () {
+myApp.service("sharePO", function() {
 
     var _PO = {};
 
     return {
-        getPO: function () {
+        getPO: function() {
             return _PO;
         },
-        setPO: function (value) {
+        setPO: function(value) {
             _PO = value;
         }
     };
@@ -121,15 +149,15 @@ myApp.service("sharePO", function () {
 
 
 // share data between two controllers
-myApp.service("share1C", function () {
+myApp.service("share1C", function() {
 
     var _1c = {};
 
     return {
-        get: function () {
+        get: function() {
             return _1c;
         },
-        set: function (value) {
+        set: function(value) {
             _1c = value;
         }
     };
@@ -138,125 +166,59 @@ myApp.service("share1C", function () {
 
 
 
-// yandex API service
-
-// 1. Get URL for download
-// 2. Скачать файл по полученному адресу, указав тот же OAuth-токен, что и в исходном запросе.
-
-myApp.service("yandexAPI", function () {
-
-    var yandexAPI = {};
-
-    yandexAPI.download = function (PO, oneC, item) {
-
-        return $http
-            .get('/api/auth/login', credentials)
-            .then(function (res) {
-
-                console.log(res);
-
-                if (res.data.token) {
-
-                    $http.defaults.headers.common['token'] = res.data.token; // set token to default headers
-
-                    return res;
-                }
-
-
-            }, function (err) {
-                console.log("AuthService factory error:");
-                console.log(err);
-            });
-    } // end   yandexAPI.download
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // configure our routes
-myApp.config(function ($routeProvider, USER_ROLES) {
+myApp.config(function($routeProvider, USER_ROLES) {
 
 
     $routeProvider
 
-        // route for the home page
+    // route for the home page
         .when('/', {
-            templateUrl: 'views/pages/PO.html',
-            // controller: 'mainController' - not work with Currentuser (hide admin role not work)
-        })
+        templateUrl: 'views/pages/PO.html',
+        // controller: 'mainController' - not work with Currentuser (hide admin role not work)
+    })
 
-        .when('/login', {
-            templateUrl: 'views/pages/login.html',
-            // controller: '1cController'
-        })
+    .when('/login', {
+        templateUrl: 'views/pages/login.html',
+        // controller: '1cController'
+    })
 
-        .when('/1c', {
-            templateUrl: 'views/pages/1c.html',
-            controller: '1cController'
-        })
+    .when('/1c', {
+        templateUrl: 'views/pages/1c.html',
+        controller: '1cController'
+    })
 
-        .when('/payment', {
-            templateUrl: 'views/pages/payment.html',
-            controller: 'contactController',
-            authorize: [USER_ROLES.admin] // allow admin only
-        })
+    .when('/payment', {
+        templateUrl: 'views/pages/payment.html',
+        controller: 'contactController',
+        authorize: [USER_ROLES.admin] // allow admin only
+    })
 
-        // PO -> detail
-        .when('/:param1', {
-            templateUrl: 'views/pages/detail.html',
-            controller: 'urlattrController'
-        })
+    // PO -> detail
+    .when('/:param1', {
+        templateUrl: 'views/pages/detail.html',
+        controller: 'urlattrController'
+    })
 
 
-        // route to maps
-        .when('/:param1/:param2/:param3', {
-            templateUrl: 'views/pages/maps.html',
-            controller: 'ymapsCtrl'
-        })
+    // route to maps
+    .when('/:param1/:param2/:param3', {
+        templateUrl: 'views/pages/maps.html',
+        controller: 'ymapsCtrl'
+    })
 
-        // route to 1c
-        .when('/:param1/:param2', { //https://namitamalik.github.io/routeParams-in-AngularJS/
-            templateUrl: 'views/pages/1c.html',
-            controller: '1cController'
-        })
+    // route to 1c
+    .when('/:param1/:param2', { //https://namitamalik.github.io/routeParams-in-AngularJS/
+        templateUrl: 'views/pages/1c.html',
+        controller: '1cController'
+    })
 
 });
 
 
-myApp.run(function ($http, $rootScope, $location, AUTH_EVENTS, AuthService, USER_ROLES, Session) {
+myApp.run(function($http, $rootScope, $location, AUTH_EVENTS, AuthService, USER_ROLES, Session) {
 
-    $rootScope.$on('$routeChangeStart', function (event, to, from) {
+    $rootScope.$on('$routeChangeStart', function(event, to, from) {
 
         if (!AuthService.isAuthenticated()) {
             $location.path('/login');
@@ -279,7 +241,7 @@ myApp.run(function ($http, $rootScope, $location, AUTH_EVENTS, AuthService, USER
 
 //  This is a container for a lot of global application logic, and an alternative to Angular’s run function
 //  Controller in body
-myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROLES, AuthService, Session, $location, AUTH_EVENTS, $timeout) {
+myApp.controller('mainController', function($scope, $rootScope, $http, USER_ROLES, AuthService, Session, $location, AUTH_EVENTS, $timeout) {
     // create a message to display in our view
     $scope.messageBody = 'message from mainController';
 
@@ -287,9 +249,9 @@ myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROL
     // 401 Unauthorized:
     $scope.Unauthorized_401 = false;
 
-    $rootScope.$on(AUTH_EVENTS.loginFailed, function (event, data) {
+    $rootScope.$on(AUTH_EVENTS.loginFailed, function(event, data) {
         $scope.Unauthorized_401 = true;
-        $timeout(function () {
+        $timeout(function() {
             $scope.Unauthorized_401 = false;
         }, 5000);
 
@@ -298,9 +260,9 @@ myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROL
     // 403 Forbidden:
     $scope.Forbidden_403 = false;
 
-    $rootScope.$on(AUTH_EVENTS.notAuthorized, function (event, data) {
+    $rootScope.$on(AUTH_EVENTS.notAuthorized, function(event, data) {
         $scope.Forbidden_403 = true;
-        $timeout(function () {
+        $timeout(function() {
             $scope.Forbidden_403 = false;
         }, 5000);
 
@@ -313,19 +275,19 @@ myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROL
 
     $scope.isAuthenticated = false; // default
 
-    $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, data) {
+    $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event, data) {
         $scope.isAuthenticated = true;
     });
-    $rootScope.$on(AUTH_EVENTS.logoutSuccess, function (event, data) {
+    $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
         $scope.isAuthenticated = false;
     });
 
-    $scope.setCurrentUser = function (user) {
+    $scope.setCurrentUser = function(user) {
         $scope.currentUser = user;
     };
 
 
-    $scope.logoutCurrentUser = function () {
+    $scope.logoutCurrentUser = function() {
 
         AuthService.logout();
         $scope.setCurrentUser(null);
@@ -360,7 +322,7 @@ myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROL
 
 
 
-myApp.controller('1cController', function ($scope, $http, $routeParams, share1C, sharePO, $timeout, FileUploader, $location, $window) {
+myApp.controller('1cController', function($scope, $http, $routeParams, share1C, sharePO, $timeout, FileUploader) {
     $scope.message = 'message from 1cController';
 
     console.log($http.defaults.headers);
@@ -374,7 +336,7 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
 
     // update CMR
-    $scope.checkboxCMRUpdate = function (boolean) {
+    $scope.checkboxCMRUpdate = function(boolean) {
 
         var data = {
             project: PO,
@@ -382,12 +344,12 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
             CMR: boolean
         };
 
-        $http.put("/api/PO/1c/CMR", data).then(function (response) {
+        $http.put("/api/PO/1c/CMR", data).then(function(response) {
             console.log(response);
 
-        }, function (err) {
+        }, function(err) {
             console.log(err);
-        }).then(function () {
+        }).then(function() {
 
         });
     };
@@ -395,17 +357,17 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
     // read CMR statusd
     $scope.CMRStatus = false;
 
-    $scope.getCMRStatus = function () {
+    $scope.getCMRStatus = function() {
 
         var _PO = PO;
         var _oneC = oneC;
 
-        $timeout(function () {
+        $timeout(function() {
 
-            $http.get("/api/" + _PO + "/" + _oneC + "/CMR").then(function (response) {
+            $http.get("/api/" + _PO + "/" + _oneC + "/CMR").then(function(response) {
                 $scope.CMRStatus = response.data.CMR;
                 // console.log($scope.CMRStatus);
-            }, function (err) {
+            }, function(err) {
                 console.log(err);
             });
 
@@ -417,7 +379,7 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
 
     // update PNR
-    $scope.checkboxPNRUpdate = function (boolean) {
+    $scope.checkboxPNRUpdate = function(boolean) {
 
         var data = {
             project: PO,
@@ -425,12 +387,12 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
             PNR: boolean
         };
 
-        $http.put("/api/PO/1c/PNR", data).then(function (response) {
+        $http.put("/api/PO/1c/PNR", data).then(function(response) {
             console.log(response);
 
-        }, function (err) {
+        }, function(err) {
             console.log(err);
-        }).then(function () {
+        }).then(function() {
 
         });
     };
@@ -438,12 +400,12 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
     // read PNR status
     $scope.PNRStatus = false;
 
-    $scope.getPNRStatus = function () {
+    $scope.getPNRStatus = function() {
 
         var _PO = PO;
         var _oneC = oneC;
 
-        $http.get("/api/" + _PO + "/" + _oneC + "/PNR").then(function (response) {
+        $http.get("/api/" + _PO + "/" + _oneC + "/PNR").then(function(response) {
             $scope.PNRStatus = response.data.PNR;
         });
 
@@ -485,35 +447,79 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
         url: '/test',
         removeAfterUpload: 'true',
         method: 'PUT' // for ya.ru
-        //autoUpload: 'false'
+            //autoUpload: 'false'
     });
 
 
-    uploader1C.onAfterAddingFile = function (fileItem) {
+    uploader1C.onAfterAddingFile = function(fileItem) {
         console.log('onAfterAddingFile');
 
 
-        // 1. Get url from cloud, link alive for 30 min
+        // 1. Create record in db:   filename: filename
+        var data1 = {
+            project: PO,
+            oneC: oneC,
+            filename: fileItem._file.name
+        };
 
+        console.log(fileItem.url);
 
+        /*
+       
+*/
+        // 2. Get url from cloud, link alive for 30 min
         $http.defaults.headers.common['Authorization'] = 'OAuth AQAAAAADISwSAASLJ7u-pbUtLkC-s3xtYcoUUo0'; // ya token
         delete $http.defaults.headers.common['token']; /////////   ya api restrict header token
         var path = encodeURIComponent(PO + '_' + oneC + '_' + fileItem._file.name);
 
-        $http.get('https://cloud-api.yandex.net/v1/disk/resources/upload?path=' + path + '&overwrite=true').then(function (response) {
+        $http.get('https://cloud-api.yandex.net/v1/disk/resources/upload?path=' + path + '&overwrite=true').then(function(response) {
 
-            fileItem.url = response.data.href;
+            return response.data.href;
+        }).then(function(response) {
+
+            fileItem.url = response;
+            console.log('!!!!!!!!!!!!!!!!!');
+
+            console.log(fileItem.url);
+
             $http.defaults.headers.common['token'] = tempToken;
+            // record in db
+            $http.put("/api/PO/1c/filescloud", data1).then(function(response) {
+                console.log(response);
 
-        }, function (reject) {
+                console.log(fileItem.url);
+            });
+
+        }, function(reject) {
             console.log(reject);
-            $http.defaults.headers.common['token'] = tempToken;
+
+            // if error delete record in db
+            $http.put("/api/PO/1c/deleteFilescloud", data1).then(function(response) {
+                console.log(response);
+
+            }, function(err) {
+                console.log(err);
+            }).then(function() {
+
+            });
         });
+
+
+        /*
+
+            // end  $http.put("/api/PO/1c/filescloud", data1).then(function(response) {
+        }, function(err) {
+            console.log(err);
+        }).then(function() {
+
+        }); // end      // 1. Create record in db:   filename: filename
+
+*/
 
     }; // end uploader1C.onAfterAddingFile = function(fileItem)         
 
 
-    uploader1C.onBeforeUploadItem(function (fileItem) {
+    uploader1C.onBeforeUploadItem(function(fileItem) {
 
         // $scope.hideSpinner = true;
     });
@@ -521,44 +527,32 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
 
 
-    uploader1C.onProgressItem = function (fileItem, progress) {
+    uploader1C.onProgressItem = function(fileItem, progress) {
         $scope.hideSpinner = false;
 
     };
 
-    uploader1C.onSuccessItem = function (fileItem, response, status, headers) {
+    uploader1C.onSuccessItem = function(fileItem, response, status, headers) {
         console.info(fileItem._file.name);
 
-        // if error upload to ya disk
+        $scope.spinner = true;
+
+        // if error delete record in db
         if (status != 201) {
 
-            console.log('error upload to ya disk')
+            $http.put("/api/PO/1c/deleteFilescloud", data1).then(function(response) {
+                console.log(response);
+
+            }, function(err) {
+                console.log(err);
+            }).then(function() {
+
+            });
         } // end if
 
         switch (status) {
             case 201:
                 console.log('201 файл был загружен без ошибок');
-
-                $scope.spinner = true;
-
-                // if success item -> create record in db
-                var data1 = {
-                    project: PO,
-                    oneC: oneC,
-                    filename: fileItem._file.name
-                };
-
-                $http.put("/api/PO/1c/filescloud", data1).then(function (response) {
-                    console.log(response);
-                    console.log(fileItem.url);
-
-                    // update table
-                    // $http.defaults.headers.common['token'] = tempToken;
-                    $scope.getListFilesFromCloud(PO, oneC);
-
-                });
-
-
                 break;
             case 202:
                 console.log('202 Accepted— файл принят сервером, но еще не был перенесен непосредственно в Диск');
@@ -578,172 +572,88 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
         }
 
+        $http.defaults.headers.common['token'] = tempToken;
+        $scope.getListFilesFromCloud(PO, oneC);
 
     };
 
-    uploader1C.onErrorItem = function (fileItem, response, status, headers) {
+    uploader1C.onErrorItem = function(fileItem, response, status, headers) {
         console.info('onErrorItem', fileItem, response, status, headers);
     };
 
-    uploader1C.onCancelItem = function (fileItem, response, status, headers) {
-        console.info('onCancelItem', fileItem, response, status, headers);
-    };
+    // download file from ya api
+    // https://cloud-api.yandex.net/v1/disk/resources/download?path=
 
 
 
+    // $http.defaults.headers.common['Authorization'] = 'OAuth AQAAAAADISwSAASLJ7u-pbUtLkC-s3xtYcoUUo0'; // ya token
+    // delete $http.defaults.headers.common['token']; /////////   ya api restrict header token
 
-    $scope.getListFilesFromCloud = function (PO, oneC) {
+    // $http.get('https://cloud-api.yandex.net/v1/disk/resources/download?path=555.txt').then(function(response) {
+    //    console.log(response.data.href);
+    // });
 
-        console.log('start getListFilesFromCloud');
 
-        $scope.ListFilesFromCloud = [];
-        $http.get("/api/filescloud/" + PO + '/' + oneC).then(function (response) {
+    $scope.getListFilesFromCloud = function(PO, oneC) {
 
-            console.log(response);
+            $scope.ListFilesFromCloud = [];
+            $http.get("/api/filescloud/" + PO + '/' + oneC).then(function(response) {
 
-            $scope.ListFilesFromCloud = response.data;
-        },function(reject){
-            console.log(reject);
-        });
+                console.log(response);
 
-    } // end getListFilesFromCloud
+                $scope.ListFilesFromCloud = response.data;
+            }).then(function(response) {});
 
+        } // end getListFilesFromCloud
 
     $scope.getListFilesFromCloud(PO, oneC);
 
 
-
-    $scope.deleteFileFromCloud = function (filename) {
+    $scope.deleteFileFromCloud = function(filename) {
 
         $http.defaults.headers.common['Authorization'] = 'OAuth AQAAAAADISwSAASLJ7u-pbUtLkC-s3xtYcoUUo0'; // ya token
         delete $http.defaults.headers.common['token']; /////////   ya api restrict header token
 
-        $http.delete('https://cloud-api.yandex.net/v1/disk/resources?path=' + encodeURIComponent(PO + '_' + oneC + '_' + filename) + '&permanently=true').then(function (response) {
+        $http.delete('https://cloud-api.yandex.net/v1/disk/resources?path=' + encodeURIComponent(PO + '_' + oneC + '_' + filename) + '&permanently=true').then(function(response) {
             console.log(response);
 
-
-
-            switch (response.status) {
-                case 204:
-                    console.log('204 OK удален');
-
-                    $http.defaults.headers.common['token'] = tempToken;
-
-                    var data1 = {
-                        project: PO,
-                        oneC: oneC,
-                        filename: filename
-                    };
-
-                    // delete record in db
-                    $http.put("/api/PO/1c/deleteFilescloud", data1).then(function (response) {
-                        console.log(response);
-
-                    }, function (err) {
-                        console.log(err);
-                    });
-
-                    break;
-            }
-
-
-        }, function (reject) {
-            console.log('reject');
-            console.log(reject);
-
             $http.defaults.headers.common['token'] = tempToken;
 
-            switch (reject.status) {
+            var data1 = {
+                project: PO,
+                oneC: oneC,
+                filename: filename
+            };
 
-                case 202:
-                    console.log('202 Операция выполняется асинхронно');
-                    break;
-                case 400:
-                    console.log('400 Некорректные данные');
-                    break;
-                case 401:
-                    console.log('401 	Не авторизован');
-                    break;
-                case 403:
-                    console.log('403 Доступ запрещён. Возможно, у приложения недостаточно прав для данного действия');
-                    break;
-                case 404:
-                    console.log('404 Не удалось найти запрошенный ресурс');
+            // delete record in db
+            $http.put("/api/PO/1c/deleteFilescloud", data1).then(function(response) {
+                console.log(response);
 
-                    var data1 = {
-                        project: PO,
-                        oneC: oneC,
-                        filename: filename
-                    };
+            }, function(err) {
+                console.log(err);
+            }).then(function() {
 
-                    // delete record in db
-                    $http.put("/api/PO/1c/deleteFilescloud", data1).then(function (response) {
-                        console.log(response);
+            });
 
-                    }, function (err) {
-                        console.log(err);
-                    });
-
-
-                    break;
-
-                case 429:
-                    console.log('507 Слишком много запросов');
-                    break;
-
-                case 503:
-                    console.log('507 Сервис временно недоступен');
-                    break;
-
-            }
-
+        }, function(reject) {
+            console.log(reject);
         });
 
-    }; // end deleteFileFromCloud
+        //$http.delete("/download/" + id).then(function(response) {
+        //    $scope.deleteFileResponse = response.data;
+        //}).then(function(response) {
+
+        // });
+    };
 
 
-
-    // download from ya api
-    /*
-     Запросить URL для скачивания.
-     Скачать файл по полученному адресу, указав тот же OAuth-токен, что и в исходном запросе.
-    */
-
-
-
-    $scope.downloadFromYaApi = function (item) {
-        console.log(item);
-
-        var PO = '555';
-        var oneC = '9258996';
-        var url;
-
-        $http.defaults.headers.common['Authorization'] = 'OAuth AQAAAAADISwSAASLJ7u-pbUtLkC-s3xtYcoUUo0'; // ya token
-        delete $http.defaults.headers.common['token']; /////////   ya api restrict header token
-        var path = encodeURIComponent(PO + '_' + oneC + '_' + item);
-
-
-        $http.get('https://cloud-api.yandex.net/v1/disk/resources/download?path=' + path).then(function (response) {
-
-            url = response.data.href;
-            $window.open(url, "_self");
-            // return url;
-
-            $http.defaults.headers.common['token'] = tempToken;
-
-        }, function (reject) {
-            console.log(reject);
-            $http.defaults.headers.common['token'] = tempToken;
-        });
-
-
-    }; // end downloadFromYaApi
+    //   https://cloud-api.yandex.net/v1/disk/resources?path=path&permanently=true
 
 
 
 }); // end controller
 
-myApp.controller('contactController', function ($scope, sharePO) {
+myApp.controller('contactController', function($scope, sharePO) {
 
     $scope.test1 = 'message from contactController';
     $scope.message = sharePO.getPO();
@@ -766,7 +676,7 @@ myApp.controller('contactController', function ($scope, sharePO) {
 
 }); // end contact controller
 
-myApp.controller('urlattrController', function ($scope, $http, $routeParams, sharePO) {
+myApp.controller('urlattrController', function($scope, $http, $routeParams, sharePO) {
 
     var PONumber1 = $routeParams.param1;
 
@@ -775,21 +685,21 @@ myApp.controller('urlattrController', function ($scope, $http, $routeParams, sha
     sharePO.setPO(PONumber1);
 
     // project get id data
-    $scope.getIdProjectData = function (PO) {
+    $scope.getIdProjectData = function(PO) {
         $scope.IdProjectData = [];
-        $http.get("/projects/" + PO).then(function (response) {
+        $http.get("/projects/" + PO).then(function(response) {
             $scope.IdProjectData = response.data;
-        }).then(function (response) {});
+        }).then(function(response) {});
     };
 
     $scope.getIdProjectData(PONumber1);
 
     // delete file
     $scope.hideBTN = false;
-    $scope.deleteFile = function (id) {
-        $http.delete("/download/" + id).then(function (response) {
+    $scope.deleteFile = function(id) {
+        $http.delete("/download/" + id).then(function(response) {
             $scope.deleteFileResponse = response.data;
-        }).then(function (response) {
+        }).then(function(response) {
 
         });
     };
@@ -798,7 +708,7 @@ myApp.controller('urlattrController', function ($scope, $http, $routeParams, sha
 
     $scope.arr = [0, 1, 2, 3, 4, 5];
 
-    $scope.deleteItem = function (array, item) {
+    $scope.deleteItem = function(array, item) {
 
         var index = array.indexOf(item);
         if (index > -1) {
@@ -806,9 +716,7 @@ myApp.controller('urlattrController', function ($scope, $http, $routeParams, sha
             array.splice(index, 1);
             $scope.newArray = array;
 
-        } else {
-            alert("error from slice");
-        }
+        } else { alert("error from slice"); }
     };
 
 
