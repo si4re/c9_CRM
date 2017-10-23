@@ -138,61 +138,6 @@ myApp.service("share1C", function () {
 
 
 
-// yandex API service
-
-// 1. Get URL for download
-// 2. Скачать файл по полученному адресу, указав тот же OAuth-токен, что и в исходном запросе.
-
-myApp.service("yandexAPI", function () {
-
-    var yandexAPI = {};
-
-    yandexAPI.download = function (PO, oneC, item) {
-
-        return $http
-            .get('/api/auth/login', credentials)
-            .then(function (res) {
-
-                console.log(res);
-
-                if (res.data.token) {
-
-                    $http.defaults.headers.common['token'] = res.data.token; // set token to default headers
-
-                    return res;
-                }
-
-
-            }, function (err) {
-                console.log("AuthService factory error:");
-                console.log(err);
-            });
-    } // end   yandexAPI.download
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -254,6 +199,9 @@ myApp.config(function ($routeProvider, USER_ROLES) {
 });
 
 
+
+
+
 myApp.run(function ($http, $rootScope, $location, AUTH_EVENTS, AuthService, USER_ROLES, Session) {
 
     $rootScope.$on('$routeChangeStart', function (event, to, from) {
@@ -276,6 +224,13 @@ myApp.run(function ($http, $rootScope, $location, AUTH_EVENTS, AuthService, USER
 
     });
 });
+
+
+
+
+
+
+
 
 //  This is a container for a lot of global application logic, and an alternative to Angular’s run function
 //  Controller in body
@@ -360,10 +315,13 @@ myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROL
 
 
 
-myApp.controller('1cController', function ($scope, $http, $routeParams, share1C, sharePO, $timeout, FileUploader, $location, $window) {
+
+
+myApp.controller('1cController', function ($scope, $http, $routeParams, share1C, sharePO, $timeout, FileUploader, $window, yaApiService, testService) {
     $scope.message = 'message from 1cController';
 
     console.log($http.defaults.headers);
+
 
 
     $scope.PONumber1 = $routeParams.param1;
@@ -602,7 +560,7 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
             console.log(response);
 
             $scope.ListFilesFromCloud = response.data;
-        },function(reject){
+        }, function (reject) {
             console.log(reject);
         });
 
@@ -709,39 +667,17 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
      Скачать файл по полученному адресу, указав тот же OAuth-токен, что и в исходном запросе.
     */
 
-
-
     $scope.downloadFromYaApi = function (item) {
-        console.log(item);
 
-        var PO = '555';
-        var oneC = '9258996';
-        var url;
-
-        $http.defaults.headers.common['Authorization'] = 'OAuth AQAAAAADISwSAASLJ7u-pbUtLkC-s3xtYcoUUo0'; // ya token
-        delete $http.defaults.headers.common['token']; /////////   ya api restrict header token
-        var path = encodeURIComponent(PO + '_' + oneC + '_' + item);
-
-
-        $http.get('https://cloud-api.yandex.net/v1/disk/resources/download?path=' + path).then(function (response) {
-
-            url = response.data.href;
-            $window.open(url, "_self");
-            // return url;
-
-            $http.defaults.headers.common['token'] = tempToken;
-
-        }, function (reject) {
-            console.log(reject);
-            $http.defaults.headers.common['token'] = tempToken;
+        yaApiService.download(PO, oneC, item).then(function (response) {
+            window.open(response, '_self');
         });
-
 
     }; // end downloadFromYaApi
 
 
 
-}); // end controller
+}); // end  1c controller
 
 myApp.controller('contactController', function ($scope, sharePO) {
 
