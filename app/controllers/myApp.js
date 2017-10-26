@@ -163,14 +163,10 @@ myApp.config(function ($routeProvider, USER_ROLES) {
 
         .when('/login', {
             templateUrl: 'views/pages/login.html',
-            // controller: '1cController'
+            
         })
 
-        .when('/1c', {
-            templateUrl: 'views/pages/1c.html',
-            controller: '1cController'
-        })
-
+       
         .when('/payment', {
             templateUrl: 'views/pages/payment.html',
             controller: 'contactController',
@@ -193,13 +189,15 @@ myApp.config(function ($routeProvider, USER_ROLES) {
         // route to 1c
         .when('/:param1/:param2', { //https://namitamalik.github.io/routeParams-in-AngularJS/
             templateUrl: 'views/pages/1c.html',
-            controller: '1cController'
+            controller: 'testtController'   //'1cController'
         })
 
 });
 
 
-
+myApp.controller('testtController', function ($scope) {
+    console.log('____________testCtrl______________');
+});
 
 
 myApp.run(function ($http, $rootScope, $location, AUTH_EVENTS, AuthService, USER_ROLES, Session) {
@@ -317,7 +315,7 @@ myApp.controller('mainController', function ($scope, $rootScope, $http, USER_ROL
 
 
 
-myApp.controller('1cController', function ($scope, $http, $routeParams, share1C, sharePO, $timeout, FileUploader, $window, yaApiService, testService) {
+myApp.controller('1cController', function ($scope, $http, $routeParams, share1C, sharePO, $timeout, FileUploader, $window, yaApiService) {
     $scope.message = 'message from 1cController';
 
     console.log($http.defaults.headers);
@@ -409,6 +407,75 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
     $scope.getPNRStatus();
 
+
+
+
+
+
+
+
+
+
+
+    // update report for 1c
+    $scope.report1CUpdate = function (boolean) {
+
+        console.log('/////////////// start  $scope.report1CUpdate  ///////////////////////////////');
+        var data = {
+            project: PO,
+            oneC: oneC,
+            report: boolean
+        };
+
+        $http.put("/api/PO/1c/report", data).then(function (response) {
+            console.log(response);
+
+        }, function (err) {
+            console.log(err);
+        }).then(function () {
+
+        });
+    };
+
+
+  
+
+
+
+    // read PNR status
+    $scope.report1CStatus = false;
+
+    $scope.getreport1CStatus = function () {
+
+        var _PO = PO;
+        var _oneC = oneC;
+
+        $http.get("/api/" + _PO + "/" + _oneC + "/report").then(function (response) {
+            $scope.report1CStatus = response.data.report;
+        });
+
+    }; // end get
+
+    $scope.getreport1CStatus();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ////////////////////////////////////////////////////////////////////////////
     // upload to ya api
 
@@ -421,25 +488,8 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
     //    if ok -> nothing
     //    if error -> delete record in db
 
-    /*
-     */
 
-    /*
-    $http.put("/api/PO/1c/deleteFilescloud", data1).then(function(response) {
-        console.log(response);
-
-    }, function(err) {
-        console.log(err);
-    }).then(function() {
-
-    }); 
-    */
-
-
-
-    var tempToken = $http.defaults.headers.common['token']; //////  ya api restrict header token
-
-    var uploader1C = $scope.uploader1C = new FileUploader({
+    var uploader = $scope.uploader1C = new FileUploader({
         url: '/test',
         removeAfterUpload: 'true',
         method: 'PUT' // for ya.ru
@@ -447,7 +497,10 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
     });
 
 
-    uploader1C.onAfterAddingFile = function (fileItem) {
+    var tempToken = $http.defaults.headers.common['token']; //////  ya api restrict header token
+
+
+    uploader.onAfterAddingFile = function (fileItem) {
         console.log('onAfterAddingFile');
 
 
@@ -470,21 +523,12 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
     }; // end uploader1C.onAfterAddingFile = function(fileItem)         
 
-
-    uploader1C.onBeforeUploadItem(function (fileItem) {
-
-        // $scope.hideSpinner = true;
-    });
-
-
-
-
-    uploader1C.onProgressItem = function (fileItem, progress) {
+    uploader.onProgressItem = function (fileItem, progress) {
         $scope.hideSpinner = false;
 
     };
 
-    uploader1C.onSuccessItem = function (fileItem, response, status, headers) {
+    uploader.onSuccessItem = function (fileItem, response, status, headers) {
         console.info(fileItem._file.name);
 
         // if error upload to ya disk
@@ -539,13 +583,21 @@ myApp.controller('1cController', function ($scope, $http, $routeParams, share1C,
 
     };
 
-    uploader1C.onErrorItem = function (fileItem, response, status, headers) {
+    uploader.onErrorItem = function (fileItem, response, status, headers) {
         console.info('onErrorItem', fileItem, response, status, headers);
     };
 
-    uploader1C.onCancelItem = function (fileItem, response, status, headers) {
+    uploader.onCancelItem = function (fileItem, response, status, headers) {
         console.info('onCancelItem', fileItem, response, status, headers);
     };
+
+
+
+    // end upload
+
+
+
+
 
 
 

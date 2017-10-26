@@ -59,7 +59,14 @@ detail.html
                 <h6 class="text-primary">PO: {{IdProjectData._id}}</h6>
                 <!--  start auth  !-->
                 <div ng-if="currentUser.role == 'admin'">
-                    <div ng-controller="httpCtrl">
+
+
+
+
+
+
+
+                    <div ng-controller="detailPOCtrl">
                         <div>
 
 
@@ -131,19 +138,17 @@ detail.html
 
 
 
-
-
-
-
-
-
-
-
-
                         </div>
 
 
-                    </div>
+                    </div> <!--  end httpCtrl !-->
+
+
+
+
+
+
+
 
                     <div ng-controller="uploadXlsxCtrl">
                         <label class="btn btn-outline-info btn-sm btn-file">Добавить 1c из Excel в PO: {{IdProjectData._id}} 
@@ -189,6 +194,14 @@ detail.html
                         </td>
 
 
+                        <td class="centerCell">
+                                {{k.report}}
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.report" disabled>
+                                    <span class="custom-control-indicator"></span>
+                                  </label>
+                            </td>
+
                         <td>
                             <!--  start auth  !-->
                             <div ng-if="currentUser.role == 'admin'">
@@ -207,5 +220,6 @@ detail.html
         </div>
         <!-- end row -->
     </div>
+
     <!-- end container -->
 </div>

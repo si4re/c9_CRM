@@ -333,6 +333,8 @@ module.exports = function(app) {
                     res.send({ error: err });
                 }
 
+                res.send({ status: 'OK' });
+
             });
 
         }); //end post
@@ -383,6 +385,8 @@ module.exports = function(app) {
                     res.send({ error: err });
                 }
 
+                res.send({ status: 'OK' });
+
             });
 
         }); //end post
@@ -414,6 +418,102 @@ module.exports = function(app) {
             });
 
         }); //end post
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+        // CR'U'D  update /api/PO/1c/report  for 1C  -> true or false
+
+        apiRoutes.put('/PO/1c/report', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+            
+                        console.log("api_project_route.js, update /api/PO/1c/report: ___________________________________________________ ");
+                        console.log(req.body);
+            
+                        Project.findOneAndUpdate({ _id: req.body.project, 'oneC': { "$elemMatch": { 'number': req.body.oneC } } }, { $set: { 'oneC.$.report': req.body.report } }, function(err, result) {
+            
+                            if (err) {
+                                console.log(err);
+                                res.send({ error: err });
+                            }
+            
+                            console.log(result);
+                            res.send({ status: 'OK' });
+                        });
+            
+                    }); //end post
+            
+            
+
+                    // C'R'UD  read status /api/PO/1c/PNR   -> true or false
+                    apiRoutes.get('/:PO/:oneC/report', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+            
+                        console.log("api_project_route.js, get /api/PO/1c/report: ");
+                        console.log(req.params.PO, req.params.oneC);
+            
+                        var PO = req.params.PO;
+                        var oneC = req.params.oneC;
+            
+            
+                        var query = { _id: PO };
+                        var projection = { oneC: { $elemMatch: { number: oneC } }, _id: 0, 'oneC.report': 1 };
+            
+            
+                        Project.findOne(query, projection, function(err, result) {
+            
+                            if (err) {
+                                console.log(err);
+                                res.send({ error: err });
+                            }
+            
+                            res.send({ PNR: result.oneC[0].report });
+                        });
+            
+                    }); //end post
+
+                    /////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

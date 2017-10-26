@@ -5,17 +5,24 @@
 </style>
 
 
+
 <style>
     #checkboxCMR .checkbox-black input[type=checkbox][disabled] {
         outline: 2px solid red
     }
 </style>
 
+<style>
+    .padding {
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+</style>
+
 <div>
 
-    1c.html
-    {{message}}
-  
+    1c.html {{message}}
+
 
 </div>
 <!--!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -33,9 +40,12 @@
 
 
 
-                <h6 class="text-success">Cloud files:</h6>
 
 
+
+
+                <!--
+        <h6 class="text-success">Cloud files:</h6>
                 <div ng-controller="1cController">
 
                     {{message}}
@@ -77,7 +87,7 @@
 
                 </div>
 
-
+            -->
 
 
 
@@ -102,19 +112,72 @@
         <div class="row">
             <!--   <div class="col col-sm-1"></div>  -->
             <div class="col">
-                {{message}}
+
                 <div class="text-primary">PO: {{PONumber1}} 1c: {{one1Number}}</div>
-                <table class="table table-responsive table-sm table-bordered">
-                    <tr>
-                        <td class="text-muted">Отчет для 1с в Excel:</td>
-                        <td>
-                            <a ng-href="/download/{{i.filename}}">отчет.xlsx</a>
-                        </td>
-                        <td>
-                            <button class="btn btn-outline-danger btn-sm" ng-disabled="">remove</button>
-                        </td>
-                    </tr>
-                </table>
+
+
+
+
+
+
+
+                <div ng-controller="1cController">
+
+
+
+                        <button  class="btn btn-outline-danger btn-sm"   ng-click="  report1CUpdate(true) " type="button">  test  </button>
+
+
+
+                    <table class="table table-responsive table-sm table-bordered">
+                        <div class="text-muted padding"> Отчет для 1с в Excel: </div>
+                        <tr ng-repeat="i in ListFilesFromCloud">
+
+                            <td>
+                                <a href="" ng-click="downloadFromYaApi(i.filename)">{{i.filename}}</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-danger btn-sm" ng-click="deleteFileFromCloud(i.filename); deleteItem(ListFilesFromCloud, i)"
+                                    ng-disabled="">remove</button>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+
+                    <label class="btn btn-outline-info btn-sm btn-file">Добавить
+                        <!--  multiple="multiple"   -->
+                        <input multiple="multiple" nv-file-select="" style="display: none" type="file" uploader="uploader1C" />
+                    </label>
+                    <ul>
+                        <li ng-repeat="item in uploader1C.queue" class="text-muted">
+                            <div>{{item.file.name}} {{ item.progress}} %
+
+                                <i ng-hide="!item.progress" class="fa fa-spinner fa-spin" style="font-size:16px"></i>
+                            </div>
+
+                        </li>
+                        <button class="btn btn-primary btn-sm" ng-click="uploader1C.uploadAll()" ng-hide="!uploader1C.queue.length ||  uploader1C.isUploading">Upload all</button>
+                        <button class="btn btn-danger btn-sm" ng-click=" uploader1C.clearQueue()" ng-disabled="!uploader1C.queue.length" ng-hide="!uploader1C.queue.length">Remove all</button>
+                    </ul>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 <div ng-controller="httpCtrl">
 
@@ -125,12 +188,15 @@
                         <span class="custom-control-description">СМР выполнены</span>
                     </label>
 
+
                     <label class="custom-control custom-checkbox">
                         <input id="checkboxPNR" type="checkbox" class="custom-control-input" ng-change="checkboxPNRUpdate(checkboxPNR)" ng-model="checkboxPNR"
                             ng-checked="PNRStatus">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">ПНР выполнены</span>
                     </label>
+                
+
                 </div>
 
             </div>
