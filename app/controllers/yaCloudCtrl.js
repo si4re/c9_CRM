@@ -95,6 +95,7 @@ myApp.controller('yaCloudCtrl', function ($scope, $http, sharePO, yaApiService, 
                     // update table
                     // $http.defaults.headers.common['token'] = tempToken;
                     $scope.getListFilesFromCloud(PO, oneC);
+                    $scope.report1CUpdate(true);
 
                 });
 
@@ -162,6 +163,8 @@ myApp.controller('yaCloudCtrl', function ($scope, $http, sharePO, yaApiService, 
                     // delete record in db
                     $http.put("/api/PO/1c/deleteFilescloud", data1).then(function (response) {
                         console.log(response);
+
+                        $scope.report1CUpdate(false); // remove report state
 
                     }, function (err) {
                         console.log(err);

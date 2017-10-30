@@ -17,7 +17,7 @@ var ProjectSchema = new mongoose.Schema({
             lat: Number,
             lng: Number
         },
-        reportTo1C: Boolean,
+        report: Boolean,
         CMR: Boolean,
         PNR: Boolean,
         comments: String,
