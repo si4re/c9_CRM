@@ -618,6 +618,119 @@ module.exports = function(app) {
 
 
 
+
+        // for detail.html
+    
+        
+// 'C'RUD create link for cloud ya disk
+        apiRoutes.put('/PO/filescloud', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+    
+                console.log("api_project_route.js, create filename needed by ya disk: ", req.body);
+    
+                var whatToUpdate = {
+                    _id: req.body.project
+                };
+    
+
+                Project.findOneAndUpdate(whatToUpdate, { $push: { 'filescloud': { filename: req.body.filename } } }, function(err, result) {
+    
+                    if (err) {
+                        console.log(err);
+                        res.send({ error: err });
+                    }
+    
+                    res.send({result: result});
+    
+                });
+    
+    
+            }); //end put
+
+
+    // CRU'D' delete filename  for cloud ya disk
+    apiRoutes.put('/PO/deleteFilescloud', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+    
+                console.log("api_project_route.js, delete filename needed by ya disk: ", req.body);
+    
+                var whatToUpdate = {
+                    _id: req.body.project
+                };
+    
+                Project.findOneAndUpdate(whatToUpdate, { $pull: { 'filescloud': { filename: req.body.filename } } }, function(err, result) {
+    
+                    if (err) {
+                        console.log(err);
+                        res.send({ error: err });
+                    }
+    
+                    res.send({result: result});
+                    
+                });
+    
+    
+            }); //end delete
+    
+    
+    
+    
+            // C'R'UD  read  filenames in db  for cloud ya disk
+            apiRoutes.get('/filescloud/:PO', requireAuth, AuthenticationController.roleAuthorization(['admin', 'user']), function(req, res) {
+    
+                console.log("api_project_route.js, read filenames in db needed by ya disk: ");
+    
+                const PO = req.params.PO;
+                   
+    
+                var query = { _id: PO };
+                   
+    
+                var whatToFind = {
+                    _id: PO
+                };
+    
+               
+    
+                Project.findOne(whatToFind, function(err, result) {
+    
+                    console.log(result);
+
+                    res.send(result);
+    
+                    if (err) {
+                        console.log(err);
+                        res.send({ error: err });
+                    }
+    
+                });
+    
+    
+            }); //end get
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Set up routes
         app.use('/api', apiRoutes);
 

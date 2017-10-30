@@ -16,33 +16,55 @@ detail.html
             <div class="col-12 col-md-auto">
                 <!-- style="border: 1px solid #5bc0de" -->
                 <h6 class="text-success">Приложенные файлы:</h6>
-                {{message}}
-                <table class="table table-responsive table-sm table-bordered">
-                    <tr ng-repeat="i in IdProjectData.files">
-                        <td>
-                            <a ng-href="/download/{{i.filename}}">{{i.originalFileName}} {{i.size/1024/1024|number:2}} Mb</a>
-                        </td>
-                        <td>
-                            <button class="btn btn-outline-danger btn-sm" ng-click="deleteFile(i.filename); deleteItem(IdProjectData.files, i)" ng-disabled="">remove</button>
-                        </td>
-                    </tr>
-                </table>
-                <!-- upload files -->
-                <div ng-controller="fileCtrl">
-                    <label class="btn btn-outline-info btn-sm btn-file">Добавить файлы 
-          <input multiple="multiple"
-                 nv-file-select=""
-                 style="display: none"
-                 type="file"
-                 uploader="uploader" /></label>
+             
+
+
+
+                <div ng-controller="yaCloudCtrl">
+
+                    {{message}}
+                    <table class="table table-responsive table-sm table-bordered">
+                        <div class="text-muted padding"> Приложенные файлы: </div>
+                        <tr ng-repeat="i in ListFilesFromCloudPO">
+
+                            <td>
+                                <a href="" ng-click="downloadFromYaApiPO(i.filename)">{{i.filename}}</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-danger btn-sm" ng-click="deleteFileFromCloudPO(i.filename); deleteItem(ListFilesFromCloudPO, i)"
+                                    ng-disabled="">remove</button>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+
+                    <label class="btn btn-outline-info btn-sm btn-file">Добавить
+                        <!--  multiple="multiple"   -->
+                        <input multiple="multiple" nv-file-select="" style="display: none" type="file" uploader="uploaderPO" />
+                    </label>
                     <ul>
-                        <li ng-repeat="item in uploader.queue">
-                            <div>{{item.file.name}} {{ item.file.size/1024/1024|number:2 }} Mb {{ item.progress }}</div>
+                        <li ng-repeat="item in uploaderPO.queue" class="text-muted">
+                            <div>{{item.file.name}} {{ item.progress}} %
+
+                                <i ng-hide="!item.progress" class="fa fa-spinner fa-spin" style="font-size:16px"></i>
+                            </div>
+
                         </li>
-                        <button class="btn btn-primary btn-sm" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length" ng-hide="!uploader.queue.length;">Upload all</button>
-                        <button class="btn btn-danger btn-sm" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length" ng-hide="!uploader.queue.length">Remove all</button>
+                        <button class="btn btn-primary btn-sm" ng-click="uploaderPO.uploadAll()" ng-hide="!uploaderPO.queue.length ||  uploaderPO.isUploading">Upload all</button>
+                        <button class="btn btn-danger btn-sm" ng-click=" uploaderPO.clearQueue()" ng-disabled="!uploaderPO.queue.length" ng-hide="!uploaderPO.queue.length">Remove all</button>
                     </ul>
+
+
+
                 </div>
+
+
+            
+
+
+
             </div>
             <div class="col col-lg-1"></div>
         </div>
@@ -77,8 +99,9 @@ detail.html
                                 <input type="text" ng-model="orderNokiaVk.value" required class="form-control form-control-success" placeholder="Номер заказа Nokia-ВК: {{orderNokiaVk.status}}">
 
                                 <span class="input-group-btn">
-                                         <button  style="width:80px"  class="btn btn-sm  {{orderNokiaVk.button.style}}" type="button" ng-click="setOrderVkNokia(IdProjectData._id, orderNokiaVk.value)"> {{orderNokiaVk.button.name}} </button>
-                                    </span>
+                                    <button style="width:80px" class="btn btn-sm  {{orderNokiaVk.button.style}}" type="button" ng-click="setOrderVkNokia(IdProjectData._id, orderNokiaVk.value)">
+                                    {{orderNokiaVk.button.name}} </button>
+                                </span>
 
                             </div>
 
@@ -93,8 +116,9 @@ detail.html
                                 <input type="text" ng-model="orderADVNokia.value" required class="form-control form-control-success" placeholder="Номер заказа Nokia-АДВ: {{orderADVNokia.status}}">
 
                                 <span class="input-group-btn">
-                                                                             <button  style="width:80px"  class="btn btn-sm  {{orderADVNokia.button.style}}" type="button" ng-click="setOrderADVNokia(IdProjectData._id, orderADVNokia.value)"> {{orderADVNokia.button.name}} </button>
-                                                                        </span>
+                                    <button style="width:80px" class="btn btn-sm  {{orderADVNokia.button.style}}" type="button" ng-click="setOrderADVNokia(IdProjectData._id, orderADVNokia.value)">
+                                    {{orderADVNokia.button.name}} </button>
+                                </span>
 
                             </div>
 
@@ -109,8 +133,9 @@ detail.html
                                 <input type="text" ng-model="totalSummADV.value" required class="form-control form-control-success" placeholder="Сумма АДВ с НДС: {{totalSummADV.status}}">
 
                                 <span class="input-group-btn">
-                                                                                                                 <button  style="width:80px"  class="btn btn-sm  {{totalSummADV.button.style}}" type="button" ng-click="setTotalSummADV(IdProjectData._id, totalSummADV.value)"> {{totalSummADV.button.name}} </button>
-                                                                                                            </span>
+                                    <button style="width:80px" class="btn btn-sm  {{totalSummADV.button.style}}" type="button" ng-click="setTotalSummADV(IdProjectData._id, totalSummADV.value)">
+                                    {{totalSummADV.button.name}} </button>
+                                </span>
 
                             </div>
 
@@ -126,8 +151,9 @@ detail.html
                                 <input type="text" ng-model="totalSummSub.value" required class="form-control form-control-success" placeholder="Сумма суб. подряд с НДС: {{totalSummSub.status}}">
 
                                 <span class="input-group-btn">
-                                                                                                                                                 <button  style="width:80px"  class="btn btn-sm  {{totalSummSub.button.style}}" type="button" ng-click="setTotalSummSub(IdProjectData._id, totalSummSub.value)"> {{totalSummSub.button.name}} </button>
-                                                                                                                                            </span>
+                                    <button style="width:80px" class="btn btn-sm  {{totalSummSub.button.style}}" type="button" ng-click="setTotalSummSub(IdProjectData._id, totalSummSub.value)">
+                                    {{totalSummSub.button.name}} </button>
+                                </span>
 
                             </div>
 
@@ -141,7 +167,8 @@ detail.html
                         </div>
 
 
-                    </div> <!--  end httpCtrl !-->
+                    </div>
+                    <!--  end httpCtrl !-->
 
 
 
@@ -151,9 +178,9 @@ detail.html
 
 
                     <div ng-controller="uploadXlsxCtrl">
-                        <label class="btn btn-outline-info btn-sm btn-file">Добавить 1c из Excel в PO: {{IdProjectData._id}} 
-            <js-xls onerror="error"
-                    onread="read"></js-xls></label>
+                        <label class="btn btn-outline-info btn-sm btn-file">Добавить 1c из Excel в PO: {{IdProjectData._id}}
+                            <js-xls onerror="error" onread="read"></js-xls>
+                        </label>
                     </div>
                     <!--  end  auth  !-->
                     <div class="alert alert-success" ng-hide="!successHttpPutAlertMessage" role="alert">
@@ -182,7 +209,7 @@ detail.html
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.CMR" disabled>
                                 <span class="custom-control-indicator"></span>
-                              </label>
+                            </label>
                         </td>
 
                         <td class="centerCell">
@@ -190,25 +217,25 @@ detail.html
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.PNR" disabled>
                                 <span class="custom-control-indicator"></span>
-                              </label>
+                            </label>
                         </td>
 
 
                         <td class="centerCell">
-                                {{k.report}}
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.report" disabled>
-                                    <span class="custom-control-indicator"></span>
-                                  </label>
-                            </td>
+                            {{k.report}}
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" value="myvalue" ng-checked="k.report" disabled>
+                                <span class="custom-control-indicator"></span>
+                            </label>
+                        </td>
 
                         <td>
                             <!--  start auth  !-->
                             <div ng-if="currentUser.role == 'admin'">
                                 <div ng-controller="httpCtrl">
                                     <button aria-label="Close" class="close" ng-click="deteteRowFromTable(k.number);deleteItem(IdProjectData.oneC, k)" type="button">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             </div>
                             <!--  end auth  !-->

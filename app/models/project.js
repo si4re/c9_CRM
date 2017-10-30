@@ -26,10 +26,8 @@ var ProjectSchema = new mongoose.Schema({
                 // linkToCloud: String
         }]
     }],
-    files: [{ // files in PO
-        filename: String,
-        originalFileName: String,
-        size: Number
+    filescloud: [{ // files in PO
+        filename: String
     }]
 
 }, {
