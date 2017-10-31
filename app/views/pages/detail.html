@@ -33,7 +33,7 @@ detail.html
                             </td>
                             <td>
                                 <button class="btn btn-outline-danger btn-sm" ng-click="deleteFileFromCloudPO(i.filename); deleteItem(ListFilesFromCloudPO, i)"
-                                    ng-disabled="">remove</button>
+                                    ng-disabled="">удалить</button>
                             </td>
                         </tr>
                     </table>
@@ -41,7 +41,7 @@ detail.html
 
 
 
-                    <label class="btn btn-outline-info btn-sm btn-file">Добавить
+                    <label ng-hide="uploaderPO.queue.length ||  uploaderPO.isUploading" class="btn btn-outline-info btn-sm btn-file">добавить
                         <!--  multiple="multiple"   -->
                         <input multiple="multiple" nv-file-select="" style="display: none" type="file" uploader="uploaderPO" />
                     </label>
